@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tyler Bui-Palsulich</title>
+    <link>http://tylerpalsulich.com/</link>
+    <description>Recent content on Tyler Bui-Palsulich</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 17 May 2015 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://tylerpalsulich.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Levenshtein Edit Distance With FSTs</title>
+      <link>http://tylerpalsulich.com/post/levenshtein-edit-distance-with-fsts/</link>
+      <pubDate>Sun, 17 May 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://tylerpalsulich.com/post/levenshtein-edit-distance-with-fsts/</guid>
+      <description>
+
+&lt;p&gt;&lt;a href=&#34;http://en.wikipedia.org/wiki/Levenshtein_distance&#34;&gt;Levenshtein edit distance&lt;/a&gt; is a metric to tell the difference between two strings. To measure the distance, you count the number of &lt;strong&gt;insertions&lt;/strong&gt;, &lt;strong&gt;deletions&lt;/strong&gt;, and &lt;strong&gt;substitutions&lt;/strong&gt; required to &amp;ldquo;edit&amp;rdquo; one string into the other. For example, the edit distance of &amp;ldquo;two&amp;rdquo; and &amp;ldquo;too&amp;rdquo; is 1 &amp;ndash; substitute &amp;ldquo;w&amp;rdquo; with &amp;ldquo;o.&amp;rdquo; The most common implementation of computing the edit distance of two strings uses dynamic programming (see &lt;a href=&#34;http://en.wikipedia.org/wiki/Levenshtein_distance&#34;&gt;the Wikipedia page&lt;/a&gt;). We&amp;rsquo;re going to take a different route in this post &amp;ndash; &lt;a href=&#34;http://tylerpalsulich.com/post/introduction-to-finite-state-transducers/&#34;&gt;finite state transducers&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Here&amp;rsquo;s the plan&lt;/strong&gt;: Come up with some transducer that can make the edits, give all of the edits weight 1, then figure out how to apply it to two strings.&lt;/p&gt;
+
+&lt;h3 id=&#34;edit-transducer&#34;&gt;Edit Transducer&lt;/h3&gt;
+
+&lt;p&gt;Our edit transducer needs to support three operations: insert, delete, and substitute. If you can, try to come up with this transducer on your own. If not&amp;hellip; To insert a character with a transducer, we can input an ε (the empty string, &amp;ldquo;&amp;rdquo;) and output the character. To delete, we input some character and output ε. To substitute, we input one character and output another. We also need the &amp;ldquo;base case,&amp;rdquo; where we input and output the same character. Easy!&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s see what it looks like for the alphabet &lt;code&gt;{a, b, c}&lt;/code&gt;. Let&amp;rsquo;s use a Python script to create the FST, since it can get pretty tedious to make by hand:
+&lt;script src=&#34;//gist.github.com/tpalsulich/cbbdf3468654051f7493.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;Here is a helper bash function to draw an FST:
+&lt;script src=&#34;//gist.github.com/tpalsulich/bd1e1119923b3e1e8007.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;Now we can put it all together:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ python make_T.py | fstcompile --isymbols=ascii.syms --osymbols=ascii.syms &amp;gt; T.fst
+$ draw T
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;img src=&#34;http://tylerpalsulich.com/images/blog/T.png&#34; alt=&#34;T.png&#34; class=&#34;center&#34;&gt;
+
+&lt;p&gt;From the top to the bottom of the image, we replace characters (e.g. &lt;code&gt;c:b/1&lt;/code&gt;), insert characters (e.g. &lt;code&gt;ε:c/1&lt;/code&gt;), delete characters (e.g. &lt;code&gt;c:ε/1&lt;/code&gt;), and leave characters unedited (e.g. &lt;code&gt;c:c&lt;/code&gt;). So, how do we actually use this? Let&amp;rsquo;s start with the input. Here&amp;rsquo;s what happens when you take &lt;code&gt;abc&lt;/code&gt; and compose it with the above:&lt;/p&gt;
+
+&lt;script src=&#34;//gist.github.com/tpalsulich/ea410f2d1a4e6489c3f2.js&#34;&gt;&lt;/script&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ fstcompile --isymbols=ascii.syms --osymbols=ascii.syms abc.fst.txt &amp;gt; abc.fst
+$ fstcompose abc.fst T.fst &amp;gt; T_abc.fst
+$ draw T_abc
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;img src=&#34;http://tylerpalsulich.com/images/blog/T_abc.png&#34; alt=&#34;T_abc.png&#34; class=&#34;center&#34;&gt;
+
+&lt;p&gt;Whoah. That&amp;rsquo;s a douzy. We can interpret this FST as outputting all possible strings we can edit &lt;code&gt;abc&lt;/code&gt; &lt;em&gt;into&lt;/em&gt;. Starting at state &lt;code&gt;0&lt;/code&gt;, we can insert &lt;code&gt;a&lt;/code&gt;, &lt;code&gt;b&lt;/code&gt;, or &lt;code&gt;c&lt;/code&gt; (by moving along an edge like &lt;code&gt;ε:a&lt;/code&gt;). When we move from state &lt;code&gt;0&lt;/code&gt; to &lt;code&gt;1&lt;/code&gt;, we can leave the &lt;code&gt;a&lt;/code&gt; alone (&lt;code&gt;a:a&lt;/code&gt;), delete it (&lt;code&gt;a:ε&lt;/code&gt;), or replace it with &lt;code&gt;b&lt;/code&gt; or &lt;code&gt;c&lt;/code&gt; (e.g. &lt;code&gt;a:b&lt;/code&gt;). Same goes for states &lt;code&gt;1&lt;/code&gt; and &lt;code&gt;2&lt;/code&gt; with &lt;code&gt;b&lt;/code&gt; and &lt;code&gt;c&lt;/code&gt;, respectively. The cost of an edit is the sum of all of the weights of your path through the FST (other FSTs might use a different operation than sum).&lt;/p&gt;
+
+&lt;h3 id=&#34;using-the-edit-transducer&#34;&gt;Using the Edit Transducer&lt;/h3&gt;
+
+&lt;p&gt;When we&amp;rsquo;re trying to edit one string into another (to compute the edit distance), we don&amp;rsquo;t want to score &lt;em&gt;all&lt;/em&gt; possible edits of the first string &amp;ndash; we only want the ones that are equal to the second string. So, how can we restrict the &lt;code&gt;T_abc.fst&lt;/code&gt; output to only show the edits which end up outputting our second string? Another composition!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ fstcompile --isymbols=ascii.syms --osymbols=ascii.syms cba.fst.txt &amp;gt; cba.fst
+$ fstcompose abc.fst T.fst | fstcompose - cba.fst &amp;gt; abc_T_cba.fst
+$ draw abc_T_cba
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;img src=&#34;http://tylerpalsulich.com/images/blog/abc_T_cba.png&#34; alt=&#34;abc_T_cba.png&#34; class=&#34;center&#34;&gt;
+
+&lt;p&gt;This transducer gives us a lattice of all of the edits we can make which can turn &lt;code&gt;abc&lt;/code&gt; into &lt;code&gt;cba&lt;/code&gt;. No matter what path you take from state 0 to state 11, you will end up with the string &lt;code&gt;cba&lt;/code&gt;. For example, if you trace the path &lt;code&gt;0 → 1 → 4 → 4 → 5 → 8 → 11&lt;/code&gt;, you delete &lt;code&gt;a&lt;/code&gt;, delete &lt;code&gt;b&lt;/code&gt;, delete &lt;code&gt;c&lt;/code&gt;, insert &lt;code&gt;c&lt;/code&gt;, insert &lt;code&gt;b&lt;/code&gt;, and insert &lt;code&gt;a&lt;/code&gt; (for a total cost of 6). The shortest (lowest cost) path is &lt;code&gt;0 → 3 → 8 → 11&lt;/code&gt; (replace &lt;code&gt;c&lt;/code&gt; with &lt;code&gt;a&lt;/code&gt;, don&amp;rsquo;t edit &lt;code&gt;b&lt;/code&gt;, and replace &lt;code&gt;a&lt;/code&gt; with &lt;code&gt;c&lt;/code&gt; for a total cost of 2). Here&amp;rsquo;s how to calculate the distance with OpenFST:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ fstshortestpath abc_T_cba.fst &amp;gt; shortest.fst
+$ draw shortest
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;img src=&#34;http://tylerpalsulich.com/images/blog/shortest.png&#34; alt=&#34;shortest.png&#34; class=&#34;center&#34;&gt;
+
+&lt;p&gt;Now, we can compute the Levenshtein edit distance between any two strings in our alphabet! For example:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ fstcompose cbacbabcaab.fst T.fst | fstcompose - abcbcbcac.fst | fstshortestpath &amp;gt; shortest2.fst
+$ draw shortest2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;img src=&#34;http://tylerpalsulich.com/images/blog/shortest2.png&#34; alt=&#34;shortest2.png&#34; class=&#34;center&#34;&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Introduction to Finite State Transducers</title>
+      <link>http://tylerpalsulich.com/post/introduction-to-finite-state-transducers/</link>
+      <pubDate>Fri, 15 May 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://tylerpalsulich.com/post/introduction-to-finite-state-transducers/</guid>
+      <description>
+
+&lt;p&gt;&lt;strong&gt;Finite state transducers&lt;/strong&gt; are the older sibling of &lt;strong&gt;finite state automata&lt;/strong&gt;. If you haven&amp;rsquo;t, take a few minutes to read through
+the &lt;a href=&#34;http://tylerpalsulich.com/post/introduction-to-finite-state-automata/&#34;&gt;introduction to FSA&lt;/a&gt;.
+An FSA only has one tape, or feed of data: input. An FST has two: input and output. So, whenever you transition on an edge in the graph, you consume some input (possibly ε, the empty string, &amp;ldquo;&amp;rdquo;) and output something (possibly ε). Edges are now labeled &lt;code&gt;i:o&lt;/code&gt;, where &lt;code&gt;i&lt;/code&gt; is the input for the edge and &lt;code&gt;o&lt;/code&gt; is the output. If the edge has a weight, the edge will be labeled &lt;code&gt;i:o/w&lt;/code&gt;, where w is the weight.&lt;/p&gt;
+
+&lt;h3 id=&#34;openfst&#34;&gt;OpenFST&lt;/h3&gt;
+
+&lt;p&gt;Just like in the introduction to FSA, the figures in this post are made with &lt;a href=&#34;http://openfst.org/twiki/bin/view/FST/WebHome&#34;&gt;OpenFST&lt;/a&gt;, an open source tool built by Google and NYU to manipulate finite state transducers. You can specify an FST to use in OpenFST with the following format:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;source&amp;gt; &amp;lt;destination&amp;gt; &amp;lt;input&amp;gt; &amp;lt;ouput&amp;gt; [&amp;lt;weight&amp;gt;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Where &lt;code&gt;source&lt;/code&gt; &amp;amp; &lt;code&gt;destination&lt;/code&gt; are integer IDs of states and &lt;code&gt;weight&lt;/code&gt; is optional. See &lt;a href=&#34;http://openfst.org/twiki/bin/view/FST/FstQuickTour#CreatingFsts&#34;&gt;the OpenFST docs&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;example-replace-all-a-s-with-b-s&#34;&gt;Example: Replace all &lt;code&gt;a&lt;/code&gt;s with &lt;code&gt;b&lt;/code&gt;s&lt;/h3&gt;
+
+&lt;p&gt;Let&amp;rsquo;s say, for whatever reason, you have a thing against the letter &lt;code&gt;a&lt;/code&gt;. Every &lt;code&gt;a&lt;/code&gt; in your input should be replaced with a &lt;code&gt;b&lt;/code&gt;. For simplicity, let&amp;rsquo;s assume that our input alphabet is &lt;code&gt;{a, b, c}&lt;/code&gt;. Here&amp;rsquo;s an FST that does the trick:&lt;/p&gt;
+
+&lt;p&gt;ascii.syms: &lt;a href=&#34;https://gist.github.com/tpalsulich/dc34e2533080f169606f&#34;&gt;link&lt;/a&gt;
+&lt;script src=&#34;//gist.github.com/tpalsulich/6c5e9ee09de64f17ab15.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ fstcompile --isymbols=&amp;lt;ascii.syms --osymbols=ascii.syms &amp;lt;a href=&amp;quot;&amp;quot;&amp;gt;ab.fst.txt&amp;lt;/a&amp;gt; &amp;gt; ab.fst
+$ fstdraw --isymbols=ascii.syms --osymbols=ascii.syms ab.fst | dot -Tpng -Gsize=6,3 -Eheadport=e -Etailport=w &amp;gt; ab.png
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;img src=&#34;http://tylerpalsulich.com/images/blog/ab.png&#34; alt=&#34;ab.png&#34; class=&#34;center&#34;&gt;
+
+&lt;h3 id=&#34;example-capitalize-every-character&#34;&gt;Example: Capitalize every character&lt;/h3&gt;
+
+&lt;p&gt;You can capitalize every character of the input by mapping lowercase letters to their uppercase version and mapping uppercase letters to themselves.
+&lt;script src=&#34;//gist.github.com/tpalsulich/3a41392136a2c673829f.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ fstcompile --isymbols=ascii.syms --osymbols=ascii.syms uppercase.fst.txt &amp;gt; uppercase.fst
+$ fstdraw --isymbols=ascii.syms --osymbols=ascii.syms uppercase.fst | dot -Tpng -Gsize=6,3 -Eheadport=e -Etailport=w &amp;gt; uppercase.png
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;img src=&#34;http://tylerpalsulich.com/images/blog/uppercase.png&#34; alt=&#34;uppercase.png&#34; class=&#34;center&#34;&gt;
+
+&lt;h3 id=&#34;composition&#34;&gt;Composition&lt;/h3&gt;
+
+&lt;p&gt;The real power of finite state transducers comes from composition. When you compose two transducers, you feed the output of one into the input of the other. We usually use ○ to indicate composition of two transducers. So &lt;code&gt;A = B ○ C&lt;/code&gt;, takes the input from the user, feeds it to &lt;code&gt;B&lt;/code&gt;, takes the output from &lt;code&gt;B&lt;/code&gt; and feeds it to &lt;code&gt;C&lt;/code&gt;, then the result is the output from &lt;code&gt;C&lt;/code&gt;. So, for example, if &lt;code&gt;A&lt;/code&gt; has two states with one edge &lt;code&gt;a:b&lt;/code&gt;, and &lt;code&gt;B&lt;/code&gt; has two states with one edge &lt;code&gt;b:c&lt;/code&gt;, then &lt;code&gt;C&lt;/code&gt; will have two states with one edge &lt;code&gt;a:c&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s try composing the &amp;ldquo;replace every &lt;code&gt;a&lt;/code&gt; with &lt;code&gt;b&lt;/code&gt;&amp;rdquo; FST from above with an FST that turns &lt;code&gt;b&lt;/code&gt;s into &lt;code&gt;z&lt;/code&gt;s. We&amp;rsquo;ll start with an FST which replaces all &lt;code&gt;b&lt;/code&gt;s with &lt;code&gt;z&lt;/code&gt;s:
+&lt;script src=&#34;//gist.github.com/tpalsulich/c29dd43e42433fedf429.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ fstcompile --isymbols=ascii.syms --osymbols=ascii.syms bc.fst.txt &amp;gt; bc.fst
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;img src=&#34;http://tylerpalsulich.com/images/blog/bc.png&#34; alt=&#34;bc.png&#34; class=&#34;center&#34;&gt;
+
+&lt;p&gt;Then compose our previous FST with this one:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;fstcompose ab.fst bc.fst &amp;gt; abc.fst
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;img src=&#34;http://tylerpalsulich.com/images/blog/abc.png&#34; alt=&#34;abc.png&#34; class=&#34;center&#34;&gt;
+
+&lt;p&gt;With this transducer, if we input &lt;code&gt;abcab&lt;/code&gt;, the output will be &lt;code&gt;zzczz&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;By tying multiple transducers together, you can come up with powerful pipelines &amp;ndash; capable of doing speech recognition, case restoration, spelling correction, and more. For example, you could have one FST that can insert vowels into the input words (with some cost) and another FST that gives a weight to every word (more popular words get a lower cost). When you compose them, you&amp;rsquo;ll be left with an FST that can restore vowels in a sentence like, &amp;ldquo;Ths sntnc hd vwls rmvd&amp;rdquo; with high accuracy.&lt;/p&gt;
+
+&lt;p&gt;In the next post, we&amp;rsquo;ll create an FST to compute the &lt;a href=&#34;http://en.wikipedia.org/wiki/Levenshtein_distance&#34;&gt;Levenshtein edit distance&lt;/a&gt; of two strings.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Introduction to Finite State Automata</title>
+      <link>http://tylerpalsulich.com/post/introduction-to-finite-state-automata/</link>
+      <pubDate>Tue, 12 May 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://tylerpalsulich.com/post/introduction-to-finite-state-automata/</guid>
+      <description>
+
+&lt;p&gt;A &lt;strong&gt;finite state automaton&lt;/strong&gt; is a graph with nodes and edges that can process input. The input is either accepted or rejected. The input is accepted if, when you are finished reading all input, you are at a final state in the automaton. You move between states (or nodes) in the automaton by consuming input. Some edges consume ε (epsilon), the empty string. A final state is usually indicated by the node having a double wall. That&amp;rsquo;s it.&lt;/p&gt;
+
+&lt;p&gt;The figures in this post are made with &lt;a href=&#34;http://openfst.org/twiki/bin/view/FST/WebHome&#34;&gt;OpenFST&lt;/a&gt;, an open source tool built by Google and NYU to manipulate finite state transducers (the older sibling of finite state automata).&lt;/p&gt;
+
+&lt;p&gt;Finite state automata can be used to process regular expressions, do natural language processing, speech recognition, and more. How? Let&amp;rsquo;s start with regular expressions. NLP and speech, that&amp;rsquo;s another post.&lt;/p&gt;
+
+&lt;h3 id=&#34;regular-expressions&#34;&gt;Regular Expressions&lt;/h3&gt;
+
+&lt;p&gt;This is not meant to be a guide to regular expressions. &lt;a href=&#34;http://en.wikipedia.org/wiki/Regular_expression&#34;&gt;There&lt;/a&gt; &lt;a href=&#34;https://www.dmoz.org/Computers/Programming/Languages/Regular_Expressions&#34;&gt;are&lt;/a&gt; &lt;a href=&#34;https://pythonspot.com/regular-expressions/&#34;&gt;plenty&lt;/a&gt; &lt;a href=&#34;http://www.regular-expressions.info/tutorial.html&#34;&gt;of&lt;/a&gt; &lt;a href=&#34;https://www.google.com/url?sa=t&amp;amp;rct=j&amp;amp;q=&amp;amp;esrc=s&amp;amp;source=web&amp;amp;cd=2&amp;amp;cad=rja&amp;amp;uact=8&amp;amp;ved=0CCoQFjAB&amp;amp;url=http%3A%2F%2Fregexone.com%2F&amp;amp;ei=RUNSVcGsIIioyATe34D4Dg&amp;amp;usg=AFQjCNFY6sjioVEzGfkfcS9NfAlBzjV2eA&amp;amp;sig2=gqb49-fgzelsy5Jxf_ghTA&#34;&gt;those&lt;/a&gt; &lt;a href=&#34;http://www.zytrax.com/tech/web/regex.htm&#34;&gt;elsewhere&lt;/a&gt;. I will assume you&amp;rsquo;re familiar with the syntax and meaning. For example, &lt;code&gt;a*b+c?&lt;/code&gt; matches &lt;code&gt;bc&lt;/code&gt;, but not &lt;code&gt;abbcc&lt;/code&gt;. To represent this expression with a finite state automaton, we&amp;rsquo;ll use &lt;a href=&#34;http://en.wikipedia.org/wiki/Thompson%27s_construction_algorithm&#34;&gt;Thomson&amp;rsquo;s construction algorithm&lt;/a&gt;. Take a minute to read through that page. So, we end up with the following slightly reduced automaton:&lt;/p&gt;
+
+&lt;p&gt;ascii.syms: &lt;a href=&#34;https://gist.github.com/tpalsulich/dc34e2533080f169606f&#34;&gt;link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Note: &lt;code&gt;&amp;amp;#949;&lt;/code&gt; is the code for &amp;#949;, the empty string.
+&lt;script src=&#34;//gist.github.com/tpalsulich/7fadb378a287c49902d8.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ fstcompile --acceptor --isymbols=ascii.syms regex.fst.txt &amp;gt; regex.fst
+$ fstdraw --acceptor --isymbols=ascii.syms regex.fst | dot -Tpng &amp;gt; regex.png
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;img src=&#34;http://tylerpalsulich.com/images/blog/regex.png&#34; alt=&#34;regex.png&#34; class=&#34;center&#34;&gt;
+
+&lt;p&gt;Let&amp;rsquo;s try processing &lt;code&gt;abbcc&lt;/code&gt; with this automaton. You start at state &lt;code&gt;0&lt;/code&gt; (the one with no input edges). We can&amp;rsquo;t move to state &lt;code&gt;1&lt;/code&gt;, since we won&amp;rsquo;t be able to process our first character &lt;code&gt;a&lt;/code&gt;. So, we move to state &lt;code&gt;2&lt;/code&gt; on an &lt;code&gt;ε&lt;/code&gt;. We stay at &lt;code&gt;2&lt;/code&gt; and process the &lt;code&gt;a&lt;/code&gt;. We have two &lt;code&gt;b&lt;/code&gt;s next. So, we move to state &lt;code&gt;1&lt;/code&gt; on an &lt;code&gt;ε&lt;/code&gt;, move to &lt;code&gt;3&lt;/code&gt; on a &lt;code&gt;b&lt;/code&gt;, then do a loop on &lt;code&gt;3&lt;/code&gt; with the second &lt;code&gt;b&lt;/code&gt;. Finally, we move to state &lt;code&gt;4&lt;/code&gt; on the first &lt;code&gt;c&lt;/code&gt;. Then, we&amp;rsquo;re stuck &amp;ndash; we have input left on the stack, but no way to process it. So, the input string does not match the regular expression.&lt;/p&gt;
+
+&lt;p&gt;It&amp;rsquo;s somewhat difficult to follow the edges around this graph since we sometimes have more than one option of where to move &lt;em&gt;right now&lt;/em&gt;. The main cause of this is Thomson&amp;rsquo;s construction leads to a lot of &lt;code&gt;ε&lt;/code&gt;&amp;hellip; We can do better.&lt;/p&gt;
+
+&lt;h3 id=&#34;properties-of-finite-state-automata&#34;&gt;Properties of Finite State Automata&lt;/h3&gt;
+
+&lt;p&gt;Two important properties of an automaton are if it is &lt;strong&gt;deterministic&lt;/strong&gt; or &lt;strong&gt;minimal&lt;/strong&gt;. Deterministic means that at every state there is exactly one valid move for each possible input letter. The first automaton was not deterministic since we could move on an &lt;code&gt;ε&lt;/code&gt; from state 0 to state &lt;code&gt;1&lt;/code&gt; &lt;em&gt;or&lt;/em&gt; &lt;code&gt;2&lt;/code&gt;. Minimal means exactly what it sounds like &amp;ndash; it is impossible to create another automaton which accepts the same language (matches the same regular expression) as this one with fewer states or transitions. Clearly the first automaton was not minimal.&lt;/p&gt;
+
+&lt;p&gt;The deterministic and minimal version of the above automaton is:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ fstrmepsilon regex.fst | fstminimize | fstdeterminize &amp;gt; regex.min.fst
+$ fstdraw --acceptor --isymbols=ascii.syms regex.min.fst | dot -Tpng &amp;gt; regex.min.png
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;img src=&#34;http://tylerpalsulich.com/images/blog/regex.min.png&#34; alt=&#34;regex.min.png&#34; class=&#34;center&#34;&gt;
+
+&lt;p&gt;Here, we exploit the fact that we can have more than one final state in our automaton. It&amp;rsquo;s deterministic because there is exactly one option of where to go from each state &amp;ndash; you can&amp;rsquo;t make any decisions. It&amp;rsquo;s minimal because you can&amp;rsquo;t make it any smaller (&lt;em&gt;hand wave&lt;/em&gt;).&lt;/p&gt;
+
+&lt;p&gt;Finite state automata can also be &lt;strong&gt;weighted&lt;/strong&gt;. Meaning, we can apply a weight to each edge of an automaton. In order to make algorithms play nice, these weights must be on what&amp;rsquo;s called a &lt;a href=&#34;http://en.wikipedia.org/wiki/Semiring&#34;&gt;semiring&lt;/a&gt;. A semiring is essentially a way to make sure certain operations (like determinization) behave properly &amp;ndash; it comes bundled with a type of numbers it operates on, a &lt;code&gt;+&lt;/code&gt; operator, a &lt;code&gt;x&lt;/code&gt; operator, and identity elements for the two operations.&lt;/p&gt;
+
+&lt;p&gt;For now, just know when you&amp;rsquo;re trying to find the best way \&amp;ldquo;through\&amp;rdquo; an automaton for the given input, you want to take the path with the lowest weight. Sometimes, the weights along the path are added together, sometimes they&amp;rsquo;re multiplied, sometimes it&amp;rsquo;s something entirely different (you use the &lt;code&gt;+&lt;/code&gt; operator for the given semiring). A weighted version of the above automaton might look like this:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://gist.github.com/tpalsulich/8ddbddc604271f02b3b0&#34;&gt;regex.w.fst.txt&lt;/a&gt;:
+&lt;script src=&#34;//gist.github.com/tpalsulich/8ddbddc604271f02b3b0.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ fstcompile --acceptor --isymbols=ascii.syms regex.w.fst.txt | fstrmepsilon | fstminimize | fstdeterminize &amp;gt; regex.w.fst
+$ fstdraw --acceptor --isymbols=ascii.syms regex.w.fst | dot -Tpng &amp;gt; regex.w.png
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;img src=&#34;http://tylerpalsulich.com/images/blog/regex.w.png&#34; alt=&#34;regex.w.png&#34; class=&#34;center&#34;&gt;
+
+&lt;p&gt;Weighted automata can be used to decide be two alternatives. For example, you&amp;rsquo;re running a speech recognition system and the user says &amp;ldquo;I have to go.&amp;rdquo; How do you know the user didn&amp;rsquo;t say, &amp;ldquo;I have two go&amp;rdquo;? First, you come up with a probability of words occurring next to each other (for example, &lt;code&gt;P(&amp;quot;to go&amp;quot;)&lt;/code&gt; and &lt;code&gt;P(&amp;quot;two go&amp;quot;)&lt;/code&gt;) &amp;ndash; a language model. Then, you translate those probabilities into weights for your finite state machine. Then, when you&amp;rsquo;re deciding between &amp;ldquo;to&amp;rdquo; and &amp;ldquo;two&amp;rdquo; you pick the sentence with lower weight (&amp;ldquo;to&amp;rdquo;).&lt;/p&gt;
+
+&lt;p&gt;At first, finite state automata seem to be simple things with a very limited use case. But, they&amp;rsquo;re useful in a wide range of problems. For example, instead of taking input on the character level, you could input words. Then, your automaton could learn to be a binary classifier of &amp;ndash; yes or no &amp;ndash; the input is a valid sentence. Finite State Transducers (which can output as well as input) are even more powerful.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

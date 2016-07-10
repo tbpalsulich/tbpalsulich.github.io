@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>http://tylerpalsulich.com/</loc>
+    <lastmod>2015-05-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://tylerpalsulich.com/post/levenshtein-edit-distance-with-fsts/</loc>
+    <lastmod>2015-05-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://tylerpalsulich.com/post/introduction-to-finite-state-transducers/</loc>
+    <lastmod>2015-05-15T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://tylerpalsulich.com/post/introduction-to-finite-state-automata/</loc>
+    <lastmod>2015-05-12T00:00:00+00:00</lastmod>
+  </url>
+  
+</urlset>

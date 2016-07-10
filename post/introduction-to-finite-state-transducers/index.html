@@ -13,7 +13,7 @@
     	<meta name="generator" content="Hugo 0.17-DEV" />
 		
 		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css">
-		<link rel="stylesheet" href="http://tylerpalsulich.comcss/main.css" />
+		<link rel="stylesheet" href="http://tylerpalsulich.com/css/main.css" />
 		
 	</head>
 
@@ -61,7 +61,7 @@ An FSA only has one tape, or feed of data: input. An FST has two: input and outp
 $ fstdraw --isymbols=ascii.syms --osymbols=ascii.syms ab.fst | dot -Tpng -Gsize=6,3 -Eheadport=e -Etailport=w &gt; ab.png
 </code></pre>
 
-<img src="/images/blog/ab.png" alt="ab.png" class="center">
+<img src="http://tylerpalsulich.com/images/blog/ab.png" alt="ab.png" class="center">
 
 <h3 id="example-capitalize-every-character">Example: Capitalize every character</h3>
 
@@ -72,7 +72,7 @@ $ fstdraw --isymbols=ascii.syms --osymbols=ascii.syms ab.fst | dot -Tpng -Gsize=
 $ fstdraw --isymbols=ascii.syms --osymbols=ascii.syms uppercase.fst | dot -Tpng -Gsize=6,3 -Eheadport=e -Etailport=w &gt; uppercase.png
 </code></pre>
 
-<img src="/images/blog/uppercase.png" alt="uppercase.png" class="center">
+<img src="http://tylerpalsulich.com/images/blog/uppercase.png" alt="uppercase.png" class="center">
 
 <h3 id="composition">Composition</h3>
 
@@ -84,14 +84,14 @@ $ fstdraw --isymbols=ascii.syms --osymbols=ascii.syms uppercase.fst | dot -Tpng 
 <pre><code class="language-bash">$ fstcompile --isymbols=ascii.syms --osymbols=ascii.syms bc.fst.txt &gt; bc.fst
 </code></pre>
 
-<img src="/images/blog/bc.png" alt="bc.png" class="center">
+<img src="http://tylerpalsulich.com/images/blog/bc.png" alt="bc.png" class="center">
 
 <p>Then compose our previous FST with this one:</p>
 
 <pre><code class="language-bash">fstcompose ab.fst bc.fst &gt; abc.fst
 </code></pre>
 
-<img src="/images/blog/abc.png" alt="abc.png" class="center">
+<img src="http://tylerpalsulich.com/images/blog/abc.png" alt="abc.png" class="center">
 
 <p>With this transducer, if we input <code>abcab</code>, the output will be <code>zzczz</code>.</p>
 

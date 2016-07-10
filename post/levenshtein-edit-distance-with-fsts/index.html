@@ -13,7 +13,7 @@
     	<meta name="generator" content="Hugo 0.17-DEV" />
 		
 		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css">
-		<link rel="stylesheet" href="http://tylerpalsulich.comcss/main.css" />
+		<link rel="stylesheet" href="http://tylerpalsulich.com/css/main.css" />
 		
 	</head>
 
@@ -57,7 +57,7 @@
 $ draw T
 </code></pre>
 
-<img src="/images/blog/T.png" alt="T.png" class="center">
+<img src="http://tylerpalsulich.com/images/blog/T.png" alt="T.png" class="center">
 
 <p>From the top to the bottom of the image, we replace characters (e.g. <code>c:b/1</code>), insert characters (e.g. <code>ε:c/1</code>), delete characters (e.g. <code>c:ε/1</code>), and leave characters unedited (e.g. <code>c:c</code>). So, how do we actually use this? Let&rsquo;s start with the input. Here&rsquo;s what happens when you take <code>abc</code> and compose it with the above:</p>
 
@@ -68,7 +68,7 @@ $ fstcompose abc.fst T.fst &gt; T_abc.fst
 $ draw T_abc
 </code></pre>
 
-<img src="/images/blog/T_abc.png" alt="T_abc.png" class="center">
+<img src="http://tylerpalsulich.com/images/blog/T_abc.png" alt="T_abc.png" class="center">
 
 <p>Whoah. That&rsquo;s a douzy. We can interpret this FST as outputting all possible strings we can edit <code>abc</code> <em>into</em>. Starting at state <code>0</code>, we can insert <code>a</code>, <code>b</code>, or <code>c</code> (by moving along an edge like <code>ε:a</code>). When we move from state <code>0</code> to <code>1</code>, we can leave the <code>a</code> alone (<code>a:a</code>), delete it (<code>a:ε</code>), or replace it with <code>b</code> or <code>c</code> (e.g. <code>a:b</code>). Same goes for states <code>1</code> and <code>2</code> with <code>b</code> and <code>c</code>, respectively. The cost of an edit is the sum of all of the weights of your path through the FST (other FSTs might use a different operation than sum).</p>
 
@@ -81,7 +81,7 @@ $ fstcompose abc.fst T.fst | fstcompose - cba.fst &gt; abc_T_cba.fst
 $ draw abc_T_cba
 </code></pre>
 
-<img src="/images/blog/abc_T_cba.png" alt="abc_T_cba.png" class="center">
+<img src="http://tylerpalsulich.com/images/blog/abc_T_cba.png" alt="abc_T_cba.png" class="center">
 
 <p>This transducer gives us a lattice of all of the edits we can make which can turn <code>abc</code> into <code>cba</code>. No matter what path you take from state 0 to state 11, you will end up with the string <code>cba</code>. For example, if you trace the path <code>0 → 1 → 4 → 4 → 5 → 8 → 11</code>, you delete <code>a</code>, delete <code>b</code>, delete <code>c</code>, insert <code>c</code>, insert <code>b</code>, and insert <code>a</code> (for a total cost of 6). The shortest (lowest cost) path is <code>0 → 3 → 8 → 11</code> (replace <code>c</code> with <code>a</code>, don&rsquo;t edit <code>b</code>, and replace <code>a</code> with <code>c</code> for a total cost of 2). Here&rsquo;s how to calculate the distance with OpenFST:</p>
 
@@ -89,7 +89,7 @@ $ draw abc_T_cba
 $ draw shortest
 </code></pre>
 
-<img src="/images/blog/shortest.png" alt="shortest.png" class="center">
+<img src="http://tylerpalsulich.com/images/blog/shortest.png" alt="shortest.png" class="center">
 
 <p>Now, we can compute the Levenshtein edit distance between any two strings in our alphabet! For example:</p>
 
@@ -97,7 +97,7 @@ $ draw shortest
 $ draw shortest2
 </code></pre>
 
-<img src="/images/blog/shortest2.png" alt="shortest2.png" class="center">
+<img src="http://tylerpalsulich.com/images/blog/shortest2.png" alt="shortest2.png" class="center">
 
 		        </article>
   			</div>

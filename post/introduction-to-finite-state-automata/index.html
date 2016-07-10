@@ -13,7 +13,7 @@
     	<meta name="generator" content="Hugo 0.17-DEV" />
 		
 		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css">
-		<link rel="stylesheet" href="http://tylerpalsulich.comcss/main.css" />
+		<link rel="stylesheet" href="http://tylerpalsulich.com/css/main.css" />
 		
 	</head>
 
@@ -56,7 +56,7 @@
 $ fstdraw --acceptor --isymbols=ascii.syms regex.fst | dot -Tpng &gt; regex.png
 </code></pre>
 
-<img src="/images/blog/regex.png" alt="regex.png" class="center">
+<img src="http://tylerpalsulich.com/images/blog/regex.png" alt="regex.png" class="center">
 
 <p>Let&rsquo;s try processing <code>abbcc</code> with this automaton. You start at state <code>0</code> (the one with no input edges). We can&rsquo;t move to state <code>1</code>, since we won&rsquo;t be able to process our first character <code>a</code>. So, we move to state <code>2</code> on an <code>ε</code>. We stay at <code>2</code> and process the <code>a</code>. We have two <code>b</code>s next. So, we move to state <code>1</code> on an <code>ε</code>, move to <code>3</code> on a <code>b</code>, then do a loop on <code>3</code> with the second <code>b</code>. Finally, we move to state <code>4</code> on the first <code>c</code>. Then, we&rsquo;re stuck &ndash; we have input left on the stack, but no way to process it. So, the input string does not match the regular expression.</p>
 
@@ -72,7 +72,7 @@ $ fstdraw --acceptor --isymbols=ascii.syms regex.fst | dot -Tpng &gt; regex.png
 $ fstdraw --acceptor --isymbols=ascii.syms regex.min.fst | dot -Tpng &gt; regex.min.png
 </code></pre>
 
-<img src="/images/blog/regex.min.png" alt="regex.min.png" class="center">
+<img src="http://tylerpalsulich.com/images/blog/regex.min.png" alt="regex.min.png" class="center">
 
 <p>Here, we exploit the fact that we can have more than one final state in our automaton. It&rsquo;s deterministic because there is exactly one option of where to go from each state &ndash; you can&rsquo;t make any decisions. It&rsquo;s minimal because you can&rsquo;t make it any smaller (<em>hand wave</em>).</p>
 
@@ -87,7 +87,7 @@ $ fstdraw --acceptor --isymbols=ascii.syms regex.min.fst | dot -Tpng &gt; regex.
 $ fstdraw --acceptor --isymbols=ascii.syms regex.w.fst | dot -Tpng &gt; regex.w.png
 </code></pre>
 
-<img src="/images/blog/regex.w.png" alt="regex.w.png" class="center">
+<img src="http://tylerpalsulich.com/images/blog/regex.w.png" alt="regex.w.png" class="center">
 
 <p>Weighted automata can be used to decide be two alternatives. For example, you&rsquo;re running a speech recognition system and the user says &ldquo;I have to go.&rdquo; How do you know the user didn&rsquo;t say, &ldquo;I have two go&rdquo;? First, you come up with a probability of words occurring next to each other (for example, <code>P(&quot;to go&quot;)</code> and <code>P(&quot;two go&quot;)</code>) &ndash; a language model. Then, you translate those probabilities into weights for your finite state machine. Then, when you&rsquo;re deciding between &ldquo;to&rdquo; and &ldquo;two&rdquo; you pick the sentence with lower weight (&ldquo;to&rdquo;).</p>
 

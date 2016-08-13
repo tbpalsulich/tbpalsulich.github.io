@@ -1593,6 +1593,10 @@
 			text-decoration: none;
 		}
 
+		a.summary {
+			color: #a2a2a2;
+		}
+
 	strong, b {
 		color: #787878;
 		font-weight: 400;
@@ -3139,3 +3143,6 @@
 			}
 
 	}
+.meta {
+	float: right;
+}

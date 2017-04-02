@@ -26,10 +26,10 @@
 &lt;p&gt;Our edit transducer needs to support three operations: insert, delete, and substitute. If you can, try to come up with this transducer on your own. If not&amp;hellip; To insert a character with a transducer, we can input an ε (the empty string, &amp;ldquo;&amp;rdquo;) and output the character. To delete, we input some character and output ε. To substitute, we input one character and output another. We also need the &amp;ldquo;base case,&amp;rdquo; where we input and output the same character. Easy!&lt;/p&gt;
 
 &lt;p&gt;Let&amp;rsquo;s see what it looks like for the alphabet &lt;code&gt;{a, b, c}&lt;/code&gt;. Let&amp;rsquo;s use a Python script to create the FST, since it can get pretty tedious to make by hand:
-&lt;script src=&#34;//gist.github.com/tpalsulich/cbbdf3468654051f7493.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+&lt;script src=&#34;//gist.github.com/tbpalsulich/cbbdf3468654051f7493.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
 
 &lt;p&gt;Here is a helper bash function to draw an FST:
-&lt;script src=&#34;//gist.github.com/tpalsulich/bd1e1119923b3e1e8007.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+&lt;script src=&#34;//gist.github.com/tbpalsulich/bd1e1119923b3e1e8007.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
 
 &lt;p&gt;Now we can put it all together:&lt;/p&gt;
 
@@ -41,7 +41,7 @@ $ draw T
 
 &lt;p&gt;From the top to the bottom of the image, we replace characters (e.g. &lt;code&gt;c:b/1&lt;/code&gt;), insert characters (e.g. &lt;code&gt;ε:c/1&lt;/code&gt;), delete characters (e.g. &lt;code&gt;c:ε/1&lt;/code&gt;), and leave characters unedited (e.g. &lt;code&gt;c:c&lt;/code&gt;). So, how do we actually use this? Let&amp;rsquo;s start with the input. Here&amp;rsquo;s what happens when you take &lt;code&gt;abc&lt;/code&gt; and compose it with the above:&lt;/p&gt;
 
-&lt;script src=&#34;//gist.github.com/tpalsulich/ea410f2d1a4e6489c3f2.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;//gist.github.com/tbpalsulich/ea410f2d1a4e6489c3f2.js&#34;&gt;&lt;/script&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ fstcompile --isymbols=ascii.syms --osymbols=ascii.syms abc.fst.txt &amp;gt; abc.fst
 $ fstcompose abc.fst T.fst &amp;gt; T_abc.fst
@@ -106,8 +106,8 @@ An FSA only has one tape, or feed of data: input. An FST has two: input and outp
 
 &lt;p&gt;Let&amp;rsquo;s say, for whatever reason, you have a thing against the letter &lt;code&gt;a&lt;/code&gt;. Every &lt;code&gt;a&lt;/code&gt; in your input should be replaced with a &lt;code&gt;b&lt;/code&gt;. For simplicity, let&amp;rsquo;s assume that our input alphabet is &lt;code&gt;{a, b, c}&lt;/code&gt;. Here&amp;rsquo;s an FST that does the trick:&lt;/p&gt;
 
-&lt;p&gt;ascii.syms: &lt;a href=&#34;https://gist.github.com/tpalsulich/dc34e2533080f169606f&#34;&gt;link&lt;/a&gt;
-&lt;script src=&#34;//gist.github.com/tpalsulich/6c5e9ee09de64f17ab15.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+&lt;p&gt;ascii.syms: &lt;a href=&#34;https://gist.github.com/tbpalsulich/dc34e2533080f169606f&#34;&gt;link&lt;/a&gt;
+&lt;script src=&#34;//gist.github.com/tbpalsulich/6c5e9ee09de64f17ab15.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ fstcompile --isymbols=&amp;lt;ascii.syms --osymbols=ascii.syms &amp;lt;a href=&amp;quot;&amp;quot;&amp;gt;ab.fst.txt&amp;lt;/a&amp;gt; &amp;gt; ab.fst
 $ fstdraw --isymbols=ascii.syms --osymbols=ascii.syms ab.fst | dot -Tpng -Gsize=6,3 -Eheadport=e -Etailport=w &amp;gt; ab.png
@@ -118,7 +118,7 @@ $ fstdraw --isymbols=ascii.syms --osymbols=ascii.syms ab.fst | dot -Tpng -Gsize=
 &lt;h3 id=&#34;example-capitalize-every-character&#34;&gt;Example: Capitalize every character&lt;/h3&gt;
 
 &lt;p&gt;You can capitalize every character of the input by mapping lowercase letters to their uppercase version and mapping uppercase letters to themselves.
-&lt;script src=&#34;//gist.github.com/tpalsulich/3a41392136a2c673829f.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+&lt;script src=&#34;//gist.github.com/tbpalsulich/3a41392136a2c673829f.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ fstcompile --isymbols=ascii.syms --osymbols=ascii.syms uppercase.fst.txt &amp;gt; uppercase.fst
 $ fstdraw --isymbols=ascii.syms --osymbols=ascii.syms uppercase.fst | dot -Tpng -Gsize=6,3 -Eheadport=e -Etailport=w &amp;gt; uppercase.png
@@ -131,7 +131,7 @@ $ fstdraw --isymbols=ascii.syms --osymbols=ascii.syms uppercase.fst | dot -Tpng 
 &lt;p&gt;The real power of finite state transducers comes from composition. When you compose two transducers, you feed the output of one into the input of the other. We usually use ○ to indicate composition of two transducers. So &lt;code&gt;A = B ○ C&lt;/code&gt;, takes the input from the user, feeds it to &lt;code&gt;B&lt;/code&gt;, takes the output from &lt;code&gt;B&lt;/code&gt; and feeds it to &lt;code&gt;C&lt;/code&gt;, then the result is the output from &lt;code&gt;C&lt;/code&gt;. So, for example, if &lt;code&gt;A&lt;/code&gt; has two states with one edge &lt;code&gt;a:b&lt;/code&gt;, and &lt;code&gt;B&lt;/code&gt; has two states with one edge &lt;code&gt;b:c&lt;/code&gt;, then &lt;code&gt;C&lt;/code&gt; will have two states with one edge &lt;code&gt;a:c&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;Let&amp;rsquo;s try composing the &amp;ldquo;replace every &lt;code&gt;a&lt;/code&gt; with &lt;code&gt;b&lt;/code&gt;&amp;rdquo; FST from above with an FST that turns &lt;code&gt;b&lt;/code&gt;s into &lt;code&gt;z&lt;/code&gt;s. We&amp;rsquo;ll start with an FST which replaces all &lt;code&gt;b&lt;/code&gt;s with &lt;code&gt;z&lt;/code&gt;s:
-&lt;script src=&#34;//gist.github.com/tpalsulich/c29dd43e42433fedf429.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+&lt;script src=&#34;//gist.github.com/tbpalsulich/c29dd43e42433fedf429.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ fstcompile --isymbols=ascii.syms --osymbols=ascii.syms bc.fst.txt &amp;gt; bc.fst
 &lt;/code&gt;&lt;/pre&gt;
@@ -171,10 +171,10 @@ $ fstdraw --isymbols=ascii.syms --osymbols=ascii.syms uppercase.fst | dot -Tpng 
 
 &lt;p&gt;This is not meant to be a guide to regular expressions. &lt;a href=&#34;http://en.wikipedia.org/wiki/Regular_expression&#34;&gt;There&lt;/a&gt; &lt;a href=&#34;https://www.dmoz.org/Computers/Programming/Languages/Regular_Expressions&#34;&gt;are&lt;/a&gt; &lt;a href=&#34;https://pythonspot.com/regular-expressions/&#34;&gt;plenty&lt;/a&gt; &lt;a href=&#34;http://www.regular-expressions.info/tutorial.html&#34;&gt;of&lt;/a&gt; &lt;a href=&#34;https://www.google.com/url?sa=t&amp;amp;rct=j&amp;amp;q=&amp;amp;esrc=s&amp;amp;source=web&amp;amp;cd=2&amp;amp;cad=rja&amp;amp;uact=8&amp;amp;ved=0CCoQFjAB&amp;amp;url=http%3A%2F%2Fregexone.com%2F&amp;amp;ei=RUNSVcGsIIioyATe34D4Dg&amp;amp;usg=AFQjCNFY6sjioVEzGfkfcS9NfAlBzjV2eA&amp;amp;sig2=gqb49-fgzelsy5Jxf_ghTA&#34;&gt;those&lt;/a&gt; &lt;a href=&#34;http://www.zytrax.com/tech/web/regex.htm&#34;&gt;elsewhere&lt;/a&gt;. I will assume you&amp;rsquo;re familiar with the syntax and meaning. For example, &lt;code&gt;a*b+c?&lt;/code&gt; matches &lt;code&gt;bc&lt;/code&gt;, but not &lt;code&gt;abbcc&lt;/code&gt;. To represent this expression with a finite state automaton, we&amp;rsquo;ll use &lt;a href=&#34;http://en.wikipedia.org/wiki/Thompson%27s_construction_algorithm&#34;&gt;Thomson&amp;rsquo;s construction algorithm&lt;/a&gt;. Take a minute to read through that page. So, we end up with the following slightly reduced automaton:&lt;/p&gt;
 
-&lt;p&gt;ascii.syms: &lt;a href=&#34;https://gist.github.com/tpalsulich/dc34e2533080f169606f&#34;&gt;link&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;ascii.syms: &lt;a href=&#34;https://gist.github.com/tbpalsulich/dc34e2533080f169606f&#34;&gt;link&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Note: &lt;code&gt;&amp;amp;#949;&lt;/code&gt; is the code for &amp;#949;, the empty string.
-&lt;script src=&#34;//gist.github.com/tpalsulich/7fadb378a287c49902d8.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+&lt;script src=&#34;//gist.github.com/tbpalsulich/7fadb378a287c49902d8.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ fstcompile --acceptor --isymbols=ascii.syms regex.fst.txt &amp;gt; regex.fst
 $ fstdraw --acceptor --isymbols=ascii.syms regex.fst | dot -Tpng &amp;gt; regex.png
@@ -204,8 +204,8 @@ $ fstdraw --acceptor --isymbols=ascii.syms regex.min.fst | dot -Tpng &amp;gt; re
 
 &lt;p&gt;For now, just know when you&amp;rsquo;re trying to find the best way \&amp;ldquo;through\&amp;rdquo; an automaton for the given input, you want to take the path with the lowest weight. Sometimes, the weights along the path are added together, sometimes they&amp;rsquo;re multiplied, sometimes it&amp;rsquo;s something entirely different (you use the &lt;code&gt;+&lt;/code&gt; operator for the given semiring). A weighted version of the above automaton might look like this:&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;https://gist.github.com/tpalsulich/8ddbddc604271f02b3b0&#34;&gt;regex.w.fst.txt&lt;/a&gt;:
-&lt;script src=&#34;//gist.github.com/tpalsulich/8ddbddc604271f02b3b0.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://gist.github.com/tbpalsulich/8ddbddc604271f02b3b0&#34;&gt;regex.w.fst.txt&lt;/a&gt;:
+&lt;script src=&#34;//gist.github.com/tbpalsulich/8ddbddc604271f02b3b0.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ fstcompile --acceptor --isymbols=ascii.syms regex.w.fst.txt | fstrmepsilon | fstminimize | fstdeterminize &amp;gt; regex.w.fst
 $ fstdraw --acceptor --isymbols=ascii.syms regex.w.fst | dot -Tpng &amp;gt; regex.w.png

@@ -42,10 +42,10 @@
 
 <p>This is not meant to be a guide to regular expressions. <a href="http://en.wikipedia.org/wiki/Regular_expression">There</a> <a href="https://www.dmoz.org/Computers/Programming/Languages/Regular_Expressions">are</a> <a href="https://pythonspot.com/regular-expressions/">plenty</a> <a href="http://www.regular-expressions.info/tutorial.html">of</a> <a href="https://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=2&amp;cad=rja&amp;uact=8&amp;ved=0CCoQFjAB&amp;url=http%3A%2F%2Fregexone.com%2F&amp;ei=RUNSVcGsIIioyATe34D4Dg&amp;usg=AFQjCNFY6sjioVEzGfkfcS9NfAlBzjV2eA&amp;sig2=gqb49-fgzelsy5Jxf_ghTA">those</a> <a href="http://www.zytrax.com/tech/web/regex.htm">elsewhere</a>. I will assume you&rsquo;re familiar with the syntax and meaning. For example, <code>a*b+c?</code> matches <code>bc</code>, but not <code>abbcc</code>. To represent this expression with a finite state automaton, we&rsquo;ll use <a href="http://en.wikipedia.org/wiki/Thompson%27s_construction_algorithm">Thomson&rsquo;s construction algorithm</a>. Take a minute to read through that page. So, we end up with the following slightly reduced automaton:</p>
 
-<p>ascii.syms: <a href="https://gist.github.com/tpalsulich/dc34e2533080f169606f">link</a></p>
+<p>ascii.syms: <a href="https://gist.github.com/tbpalsulich/dc34e2533080f169606f">link</a></p>
 
 <p>Note: <code>&amp;#949;</code> is the code for &#949;, the empty string.
-<script src="//gist.github.com/tpalsulich/7fadb378a287c49902d8.js"></script></p>
+<script src="//gist.github.com/tbpalsulich/7fadb378a287c49902d8.js"></script></p>
 
 <pre><code class="language-bash">$ fstcompile --acceptor --isymbols=ascii.syms regex.fst.txt &gt; regex.fst
 $ fstdraw --acceptor --isymbols=ascii.syms regex.fst | dot -Tpng &gt; regex.png
@@ -75,8 +75,8 @@ $ fstdraw --acceptor --isymbols=ascii.syms regex.min.fst | dot -Tpng &gt; regex.
 
 <p>For now, just know when you&rsquo;re trying to find the best way \&ldquo;through\&rdquo; an automaton for the given input, you want to take the path with the lowest weight. Sometimes, the weights along the path are added together, sometimes they&rsquo;re multiplied, sometimes it&rsquo;s something entirely different (you use the <code>+</code> operator for the given semiring). A weighted version of the above automaton might look like this:</p>
 
-<p><a href="https://gist.github.com/tpalsulich/8ddbddc604271f02b3b0">regex.w.fst.txt</a>:
-<script src="//gist.github.com/tpalsulich/8ddbddc604271f02b3b0.js"></script></p>
+<p><a href="https://gist.github.com/tbpalsulich/8ddbddc604271f02b3b0">regex.w.fst.txt</a>:
+<script src="//gist.github.com/tbpalsulich/8ddbddc604271f02b3b0.js"></script></p>
 
 <pre><code class="language-bash">$ fstcompile --acceptor --isymbols=ascii.syms regex.w.fst.txt | fstrmepsilon | fstminimize | fstdeterminize &gt; regex.w.fst
 $ fstdraw --acceptor --isymbols=ascii.syms regex.w.fst | dot -Tpng &gt; regex.w.png
@@ -111,7 +111,7 @@ $ fstdraw --acceptor --isymbols=ascii.syms regex.w.fst | dot -Tpng &gt; regex.w.
 		<li>
 			<ul class="sidebar">
 				
-				<li><a href="//github.com/tpalsulich" target="_blank" class="sidebar"><i class="fa fa-github"></i> github.com/tpalsulich</a></li>
+				<li><a href="//github.com/tbpalsulich" target="_blank" class="sidebar"><i class="fa fa-github"></i> github.com/tbpalsulich</a></li>
 				
 				
 				

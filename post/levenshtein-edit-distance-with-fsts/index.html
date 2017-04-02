@@ -41,10 +41,10 @@
 <p>Our edit transducer needs to support three operations: insert, delete, and substitute. If you can, try to come up with this transducer on your own. If not&hellip; To insert a character with a transducer, we can input an ε (the empty string, &ldquo;&rdquo;) and output the character. To delete, we input some character and output ε. To substitute, we input one character and output another. We also need the &ldquo;base case,&rdquo; where we input and output the same character. Easy!</p>
 
 <p>Let&rsquo;s see what it looks like for the alphabet <code>{a, b, c}</code>. Let&rsquo;s use a Python script to create the FST, since it can get pretty tedious to make by hand:
-<script src="//gist.github.com/tpalsulich/cbbdf3468654051f7493.js"></script></p>
+<script src="//gist.github.com/tbpalsulich/cbbdf3468654051f7493.js"></script></p>
 
 <p>Here is a helper bash function to draw an FST:
-<script src="//gist.github.com/tpalsulich/bd1e1119923b3e1e8007.js"></script></p>
+<script src="//gist.github.com/tbpalsulich/bd1e1119923b3e1e8007.js"></script></p>
 
 <p>Now we can put it all together:</p>
 
@@ -56,7 +56,7 @@ $ draw T
 
 <p>From the top to the bottom of the image, we replace characters (e.g. <code>c:b/1</code>), insert characters (e.g. <code>ε:c/1</code>), delete characters (e.g. <code>c:ε/1</code>), and leave characters unedited (e.g. <code>c:c</code>). So, how do we actually use this? Let&rsquo;s start with the input. Here&rsquo;s what happens when you take <code>abc</code> and compose it with the above:</p>
 
-<script src="//gist.github.com/tpalsulich/ea410f2d1a4e6489c3f2.js"></script>
+<script src="//gist.github.com/tbpalsulich/ea410f2d1a4e6489c3f2.js"></script>
 
 <pre><code class="language-bash">$ fstcompile --isymbols=ascii.syms --osymbols=ascii.syms abc.fst.txt &gt; abc.fst
 $ fstcompose abc.fst T.fst &gt; T_abc.fst
@@ -115,7 +115,7 @@ $ draw shortest2
 		<li>
 			<ul class="sidebar">
 				
-				<li><a href="//github.com/tpalsulich" target="_blank" class="sidebar"><i class="fa fa-github"></i> github.com/tpalsulich</a></li>
+				<li><a href="//github.com/tbpalsulich" target="_blank" class="sidebar"><i class="fa fa-github"></i> github.com/tbpalsulich</a></li>
 				
 				
 				

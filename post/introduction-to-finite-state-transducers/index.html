@@ -49,8 +49,8 @@ An FSA only has one tape, or feed of data: input. An FST has two: input and outp
 
 <p>Let&rsquo;s say, for whatever reason, you have a thing against the letter <code>a</code>. Every <code>a</code> in your input should be replaced with a <code>b</code>. For simplicity, let&rsquo;s assume that our input alphabet is <code>{a, b, c}</code>. Here&rsquo;s an FST that does the trick:</p>
 
-<p>ascii.syms: <a href="https://gist.github.com/tpalsulich/dc34e2533080f169606f">link</a>
-<script src="//gist.github.com/tpalsulich/6c5e9ee09de64f17ab15.js"></script></p>
+<p>ascii.syms: <a href="https://gist.github.com/tbpalsulich/dc34e2533080f169606f">link</a>
+<script src="//gist.github.com/tbpalsulich/6c5e9ee09de64f17ab15.js"></script></p>
 
 <pre><code class="language-bash">$ fstcompile --isymbols=&lt;ascii.syms --osymbols=ascii.syms &lt;a href=&quot;&quot;&gt;ab.fst.txt&lt;/a&gt; &gt; ab.fst
 $ fstdraw --isymbols=ascii.syms --osymbols=ascii.syms ab.fst | dot -Tpng -Gsize=6,3 -Eheadport=e -Etailport=w &gt; ab.png
@@ -61,7 +61,7 @@ $ fstdraw --isymbols=ascii.syms --osymbols=ascii.syms ab.fst | dot -Tpng -Gsize=
 <h3 id="example-capitalize-every-character">Example: Capitalize every character</h3>
 
 <p>You can capitalize every character of the input by mapping lowercase letters to their uppercase version and mapping uppercase letters to themselves.
-<script src="//gist.github.com/tpalsulich/3a41392136a2c673829f.js"></script></p>
+<script src="//gist.github.com/tbpalsulich/3a41392136a2c673829f.js"></script></p>
 
 <pre><code class="language-bash">$ fstcompile --isymbols=ascii.syms --osymbols=ascii.syms uppercase.fst.txt &gt; uppercase.fst
 $ fstdraw --isymbols=ascii.syms --osymbols=ascii.syms uppercase.fst | dot -Tpng -Gsize=6,3 -Eheadport=e -Etailport=w &gt; uppercase.png
@@ -74,7 +74,7 @@ $ fstdraw --isymbols=ascii.syms --osymbols=ascii.syms uppercase.fst | dot -Tpng 
 <p>The real power of finite state transducers comes from composition. When you compose two transducers, you feed the output of one into the input of the other. We usually use ○ to indicate composition of two transducers. So <code>A = B ○ C</code>, takes the input from the user, feeds it to <code>B</code>, takes the output from <code>B</code> and feeds it to <code>C</code>, then the result is the output from <code>C</code>. So, for example, if <code>A</code> has two states with one edge <code>a:b</code>, and <code>B</code> has two states with one edge <code>b:c</code>, then <code>C</code> will have two states with one edge <code>a:c</code>.</p>
 
 <p>Let&rsquo;s try composing the &ldquo;replace every <code>a</code> with <code>b</code>&rdquo; FST from above with an FST that turns <code>b</code>s into <code>z</code>s. We&rsquo;ll start with an FST which replaces all <code>b</code>s with <code>z</code>s:
-<script src="//gist.github.com/tpalsulich/c29dd43e42433fedf429.js"></script></p>
+<script src="//gist.github.com/tbpalsulich/c29dd43e42433fedf429.js"></script></p>
 
 <pre><code class="language-bash">$ fstcompile --isymbols=ascii.syms --osymbols=ascii.syms bc.fst.txt &gt; bc.fst
 </code></pre>
@@ -117,7 +117,7 @@ $ fstdraw --isymbols=ascii.syms --osymbols=ascii.syms uppercase.fst | dot -Tpng 
 		<li>
 			<ul class="sidebar">
 				
-				<li><a href="//github.com/tpalsulich" target="_blank" class="sidebar"><i class="fa fa-github"></i> github.com/tpalsulich</a></li>
+				<li><a href="//github.com/tbpalsulich" target="_blank" class="sidebar"><i class="fa fa-github"></i> github.com/tbpalsulich</a></li>
 				
 				
 				

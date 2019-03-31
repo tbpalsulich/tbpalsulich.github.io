@@ -1,38 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="author" content="Tyler Bui-Palsulich">
+    
+    <meta name="keywords" content="blog,developer,personal">
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Levenshtein Edit Distance With FSTs"/>
+<meta name="twitter:description" content="How to use finite state transducers to compute the difference between two strings."/>
+
+    <meta property="og:title" content="Levenshtein Edit Distance With FSTs" />
+<meta property="og:description" content="How to use finite state transducers to compute the difference between two strings." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://buipalsulich.com/post/levenshtein-edit-distance-with-fsts/" />
+<meta property="article:published_time" content="2015-05-17T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2015-05-17T00:00:00&#43;00:00"/>
 
 
-<!DOCTYPE HTML>
+    
+      <base href="http://buipalsulich.com/post/levenshtein-edit-distance-with-fsts/">
+    
+    <title>
+  Levenshtein Edit Distance With FSTs · Tyler Bui-Palsulich
+</title>
 
-<html>
-	<head>
-		<title>Levenshtein Edit Distance With FSTs</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta name="author" content="Tyler Bui-Palsulich">
-    	<meta name="description" content="Personal site with programming, computer science, and math.">
-    	<meta http-equiv="content-language" content="en-us" />
-    	<meta name="generator" content="Hugo 0.17-DEV" />
-		
-		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css">
-		<link rel="stylesheet" href="http://tylerpalsulich.com/css/main.css" />
-		
-	</head>
+    
+      <link rel="canonical" href="http://buipalsulich.com/post/levenshtein-edit-distance-with-fsts/">
+    
 
-</body>
-<!-- Header -->
-<header id="header">
-	<a href="http://tylerpalsulich.com" class="image avatar"><img src="http://tylerpalsulich.com/images/profile.jpg" alt="" /></a>
-	<h1><strong>I&rsquo;m Tyler Bui-Palsulich</strong>, a software engineer and programmer.</h1>
-</header>
-		<!-- Main -->
-		<section id="main">
-  			<h1 id="title">Levenshtein Edit Distance With FSTs</h1>
-  			<h4 id="date"> Sun May 17, 2015 </h4>
-  			<h5 id="wc"> 700 Words</h5>
-  			<div>
-		        <article id="content">
-		           
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css" integrity="sha256-oSrCnRYXvHG31SBifqP2PM1uje7SJUyX0nTwO2RJV54=" crossorigin="anonymous" />
 
-<p><a href="http://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein edit distance</a> is a metric to tell the difference between two strings. To measure the distance, you count the number of <strong>insertions</strong>, <strong>deletions</strong>, and <strong>substitutions</strong> required to &ldquo;edit&rdquo; one string into the other. For example, the edit distance of &ldquo;two&rdquo; and &ldquo;too&rdquo; is 1 &ndash; substitute &ldquo;w&rdquo; with &ldquo;o.&rdquo; The most common implementation of computing the edit distance of two strings uses dynamic programming (see <a href="http://en.wikipedia.org/wiki/Levenshtein_distance">the Wikipedia page</a>). We&rsquo;re going to take a different route in this post &ndash; <a href="/post/introduction-to-finite-state-transducers/">finite state transducers</a>.</p>
+    
+      
+      
+      <link rel="stylesheet" href="http://buipalsulich.com/css/coder.min.28d751104f30c16da1aa1bb04015cbe662cacfe0d1b01af4f2240ad58580069c.css" integrity="sha256-KNdREE8wwW2hqhuwQBXL5mLKz&#43;DRsBr08iQK1YWABpw=" crossorigin="anonymous" media="screen" />
+    
+
+    
+
+    
+
+    
+
+    <link rel="icon" type="image/png" href="http://buipalsulich.com/images/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="http://buipalsulich.com/images/favicon-16x16.png" sizes="16x16">
+
+    <meta name="generator" content="Hugo 0.54.0" />
+  </head>
+
+  <body class=" ">
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="http://buipalsulich.com">
+      Tyler Bui-Palsulich
+    </a>
+    <input type="checkbox" id="menu-toggle" />
+    <label class="menu-button float-right" for="menu-toggle"><i class="fas fa-bars"></i></label>
+    <ul class="navigation-list">
+      
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="http://buipalsulich.com/post/">Blog</a>
+          </li>
+        
+      
+      
+    </ul>
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container page">
+  <article>
+    <header>
+      <h1>Levenshtein Edit Distance With FSTs</h1>
+    </header>
+
+    
+
+<p><a href="http://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein edit distance</a> is a metric to tell the difference between two strings. To measure the distance, you count the number of <strong>insertions</strong>, <strong>deletions</strong>, and <strong>substitutions</strong> required to &ldquo;edit&rdquo; one string into the other. For example, the edit distance of &ldquo;two&rdquo; and &ldquo;too&rdquo; is 1 &ndash; substitute &ldquo;w&rdquo; with &ldquo;o.&rdquo; The most common implementation of computing the edit distance of two strings uses dynamic programming (see <a href="http://en.wikipedia.org/wiki/Levenshtein_distance">the Wikipedia page</a>). We&rsquo;re going to take a different route in this post &ndash; <a href="http://buipalsulich.com/post/introduction-to-finite-state-transducers/">finite state transducers</a>.</p>
 
 <p><strong>Here&rsquo;s the plan</strong>: Come up with some transducer that can make the edits, give all of the edits weight 1, then figure out how to apply it to two strings.</p>
 
@@ -41,121 +96,66 @@
 <p>Our edit transducer needs to support three operations: insert, delete, and substitute. If you can, try to come up with this transducer on your own. If not&hellip; To insert a character with a transducer, we can input an ε (the empty string, &ldquo;&rdquo;) and output the character. To delete, we input some character and output ε. To substitute, we input one character and output another. We also need the &ldquo;base case,&rdquo; where we input and output the same character. Easy!</p>
 
 <p>Let&rsquo;s see what it looks like for the alphabet <code>{a, b, c}</code>. Let&rsquo;s use a Python script to create the FST, since it can get pretty tedious to make by hand:
-<script src="//gist.github.com/tbpalsulich/cbbdf3468654051f7493.js"></script></p>
+<script type="application/javascript" src="//gist.github.com/tbpalsulich/cbbdf3468654051f7493.js"></script></p>
 
 <p>Here is a helper bash function to draw an FST:
-<script src="//gist.github.com/tbpalsulich/bd1e1119923b3e1e8007.js"></script></p>
+<script type="application/javascript" src="//gist.github.com/tbpalsulich/bd1e1119923b3e1e8007.js"></script></p>
 
 <p>Now we can put it all together:</p>
-
-<pre><code class="language-bash">$ python make_T.py | fstcompile --isymbols=ascii.syms --osymbols=ascii.syms &gt; T.fst
-$ draw T
-</code></pre>
-
-<img src="http://tylerpalsulich.com/images/blog/T.png" alt="T.png" class="center">
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ python make_T.py | fstcompile --isymbols=ascii.syms --osymbols=ascii.syms &gt; T.fst
+$ draw T</code></pre></div>
+<img src="http://buipalsulich.com/images/blog/T.png" alt="T.png" class="center">
 
 <p>From the top to the bottom of the image, we replace characters (e.g. <code>c:b/1</code>), insert characters (e.g. <code>ε:c/1</code>), delete characters (e.g. <code>c:ε/1</code>), and leave characters unedited (e.g. <code>c:c</code>). So, how do we actually use this? Let&rsquo;s start with the input. Here&rsquo;s what happens when you take <code>abc</code> and compose it with the above:</p>
 
-<script src="//gist.github.com/tbpalsulich/ea410f2d1a4e6489c3f2.js"></script>
-
-<pre><code class="language-bash">$ fstcompile --isymbols=ascii.syms --osymbols=ascii.syms abc.fst.txt &gt; abc.fst
+<script type="application/javascript" src="//gist.github.com/tbpalsulich/ea410f2d1a4e6489c3f2.js"></script>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ fstcompile --isymbols=ascii.syms --osymbols=ascii.syms abc.fst.txt &gt; abc.fst
 $ fstcompose abc.fst T.fst &gt; T_abc.fst
-$ draw T_abc
-</code></pre>
-
-<img src="http://tylerpalsulich.com/images/blog/T_abc.png" alt="T_abc.png" class="center">
+$ draw T_abc</code></pre></div>
+<img src="http://buipalsulich.com/images/blog/T_abc.png" alt="T_abc.png" class="center">
 
 <p>Whoah. That&rsquo;s a douzy. We can interpret this FST as outputting all possible strings we can edit <code>abc</code> <em>into</em>. Starting at state <code>0</code>, we can insert <code>a</code>, <code>b</code>, or <code>c</code> (by moving along an edge like <code>ε:a</code>). When we move from state <code>0</code> to <code>1</code>, we can leave the <code>a</code> alone (<code>a:a</code>), delete it (<code>a:ε</code>), or replace it with <code>b</code> or <code>c</code> (e.g. <code>a:b</code>). Same goes for states <code>1</code> and <code>2</code> with <code>b</code> and <code>c</code>, respectively. The cost of an edit is the sum of all of the weights of your path through the FST (other FSTs might use a different operation than sum).</p>
 
 <h3 id="using-the-edit-transducer">Using the Edit Transducer</h3>
 
 <p>When we&rsquo;re trying to edit one string into another (to compute the edit distance), we don&rsquo;t want to score <em>all</em> possible edits of the first string &ndash; we only want the ones that are equal to the second string. So, how can we restrict the <code>T_abc.fst</code> output to only show the edits which end up outputting our second string? Another composition!</p>
-
-<pre><code class="language-bash">$ fstcompile --isymbols=ascii.syms --osymbols=ascii.syms cba.fst.txt &gt; cba.fst
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ fstcompile --isymbols=ascii.syms --osymbols=ascii.syms cba.fst.txt &gt; cba.fst
 $ fstcompose abc.fst T.fst | fstcompose - cba.fst &gt; abc_T_cba.fst
-$ draw abc_T_cba
-</code></pre>
-
-<img src="http://tylerpalsulich.com/images/blog/abc_T_cba.png" alt="abc_T_cba.png" class="center">
+$ draw abc_T_cba</code></pre></div>
+<img src="http://buipalsulich.com/images/blog/abc_T_cba.png" alt="abc_T_cba.png" class="center">
 
 <p>This transducer gives us a lattice of all of the edits we can make which can turn <code>abc</code> into <code>cba</code>. No matter what path you take from state 0 to state 11, you will end up with the string <code>cba</code>. For example, if you trace the path <code>0 → 1 → 4 → 4 → 5 → 8 → 11</code>, you delete <code>a</code>, delete <code>b</code>, delete <code>c</code>, insert <code>c</code>, insert <code>b</code>, and insert <code>a</code> (for a total cost of 6). The shortest (lowest cost) path is <code>0 → 3 → 8 → 11</code> (replace <code>c</code> with <code>a</code>, don&rsquo;t edit <code>b</code>, and replace <code>a</code> with <code>c</code> for a total cost of 2). Here&rsquo;s how to calculate the distance with OpenFST:</p>
-
-<pre><code class="language-bash">$ fstshortestpath abc_T_cba.fst &gt; shortest.fst
-$ draw shortest
-</code></pre>
-
-<img src="http://tylerpalsulich.com/images/blog/shortest.png" alt="shortest.png" class="center">
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ fstshortestpath abc_T_cba.fst &gt; shortest.fst
+$ draw shortest</code></pre></div>
+<img src="http://buipalsulich.com/images/blog/shortest.png" alt="shortest.png" class="center">
 
 <p>Now, we can compute the Levenshtein edit distance between any two strings in our alphabet! For example:</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ fstcompose cbacbabcaab.fst T.fst | fstcompose - abcbcbcac.fst | fstshortestpath &gt; shortest2.fst
+$ draw shortest2</pre></div>
+<img src="http://buipalsulich.com/images/blog/shortest2.png" alt="shortest2.png" class="center">
 
-<pre><code>$ fstcompose cbacbabcaab.fst T.fst | fstcompose - abcbcbcac.fst | fstshortestpath &gt; shortest2.fst
-$ draw shortest2
-</code></pre>
+  </article>
+</section>
 
-<img src="http://tylerpalsulich.com/images/blog/shortest2.png" alt="shortest2.png" class="center">
 
-		        </article>
-  			</div>
-  			
-			
-				<p>If you have any questions or comments, please reach out to <a href="//twitter.com/tbpalsulich" target="_blank">@tbpalsulich</a>.</p>
-			
-		</section>
-		<!-- Footer -->
-<footer id="footer">
-	<ul class="sidebar">
-		<header class="major"><h3>Recent Posts:</h2></header>
-		
-			<li><a href="http://tylerpalsulich.com/post/levenshtein-edit-distance-with-fsts/" class="sidebar">Levenshtein Edit Distance With FSTs</a></li>
-		
-			<li><a href="http://tylerpalsulich.com/post/introduction-to-finite-state-transducers/" class="sidebar">Introduction to Finite State Transducers</a></li>
-		
-			<li><a href="http://tylerpalsulich.com/post/introduction-to-finite-state-automata/" class="sidebar">Introduction to Finite State Automata</a></li>
-		
-	</ul>
-	</br>
-	<ul class="sidebar">
-		<li>
-			<ul class="sidebar">
-				
-				<li><a href="//github.com/tbpalsulich" target="_blank" class="sidebar"><i class="fa fa-github"></i> github.com/tbpalsulich</a></li>
-				
-				
-				<li><a href="//twitter.com/tbpalsulich" target="_blank" class="sidebar"><i class="fa fa-twitter"></i> twitter.com/tbpalsulich</a></li>
-				
-				
-				
-				<li><a href="//linkedin.com/in/tyler-palsulich-b1183a4b" target="_blank" class="sidebar"><i class="fa fa-linkedin"></i> LinkedIn</a></li>
-				
-			</ul>
-		</li>
-		
-		<ul class="sidebar">Built with the awesome <a href="http://gohugo.io" class="sidebar">Hugo</a></ul>
-		<ul class="copyright sidebar">
-			
-			<li>&copy; Tyler Bui-Palsulich</li>
-			
-		</ul>
-	</ul>
+      </div>
+
+      <footer class="footer">
+  <section class="container">
+    
+     © 2019
+    
+       · 
+      Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+    
+    
+  </section>
 </footer>
 
-<!-- Scripts -->
-<script src="http://tylerpalsulich.comjs/jquery.min.js"></script>
-<script src="http://tylerpalsulich.comjs/jquery.poptrox.min.js"></script>
-<script src="http://tylerpalsulich.comjs/skel.min.js"></script>
-<script src="http://tylerpalsulich.comjs/util.js"></script>
+    </main>
 
-<script src="http://tylerpalsulich.comjs/main.js"></script>
+    
 
+  </body>
 
-<!-- Google Analytics -->
-<script>
-var _gaq=[['_setAccount','UA-38958586-1'],['_trackPageview']];
-(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-	g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-	s.parentNode.insertBefore(g,s)}(document,'script'));
-</script>
-
-
-	</body>
 </html>

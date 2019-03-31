@@ -1,48 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="author" content="Tyler Bui-Palsulich">
+    
+    <meta name="keywords" content="blog,developer,personal">
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Introduction to Finite State Transducers"/>
+<meta name="twitter:description" content="An introduction to finite state transducers: examples, composition, and motivation."/>
+
+    <meta property="og:title" content="Introduction to Finite State Transducers" />
+<meta property="og:description" content="An introduction to finite state transducers: examples, composition, and motivation." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://buipalsulich.com/post/introduction-to-finite-state-transducers/" />
+<meta property="article:published_time" content="2015-05-15T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2015-05-15T00:00:00&#43;00:00"/>
 
 
-<!DOCTYPE HTML>
+    
+      <base href="http://buipalsulich.com/post/introduction-to-finite-state-transducers/">
+    
+    <title>
+  Introduction to Finite State Transducers · Tyler Bui-Palsulich
+</title>
 
-<html>
-	<head>
-		<title>Introduction to Finite State Transducers</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta name="author" content="Tyler Bui-Palsulich">
-    	<meta name="description" content="Personal site with programming, computer science, and math.">
-    	<meta http-equiv="content-language" content="en-us" />
-    	<meta name="generator" content="Hugo 0.17-DEV" />
-		
-		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css">
-		<link rel="stylesheet" href="http://tylerpalsulich.com/css/main.css" />
-		
-	</head>
+    
+      <link rel="canonical" href="http://buipalsulich.com/post/introduction-to-finite-state-transducers/">
+    
 
-</body>
-<!-- Header -->
-<header id="header">
-	<a href="http://tylerpalsulich.com" class="image avatar"><img src="http://tylerpalsulich.com/images/profile.jpg" alt="" /></a>
-	<h1><strong>I&rsquo;m Tyler Bui-Palsulich</strong>, a software engineer and programmer.</h1>
-</header>
-		<!-- Main -->
-		<section id="main">
-  			<h1 id="title">Introduction to Finite State Transducers</h1>
-  			<h4 id="date"> Fri May 15, 2015 </h4>
-  			<h5 id="wc"> 600 Words</h5>
-  			<div>
-		        <article id="content">
-		           
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css" integrity="sha256-oSrCnRYXvHG31SBifqP2PM1uje7SJUyX0nTwO2RJV54=" crossorigin="anonymous" />
+
+    
+      
+      
+      <link rel="stylesheet" href="http://buipalsulich.com/css/coder.min.28d751104f30c16da1aa1bb04015cbe662cacfe0d1b01af4f2240ad58580069c.css" integrity="sha256-KNdREE8wwW2hqhuwQBXL5mLKz&#43;DRsBr08iQK1YWABpw=" crossorigin="anonymous" media="screen" />
+    
+
+    
+
+    
+
+    
+
+    <link rel="icon" type="image/png" href="http://buipalsulich.com/images/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="http://buipalsulich.com/images/favicon-16x16.png" sizes="16x16">
+
+    <meta name="generator" content="Hugo 0.54.0" />
+  </head>
+
+  <body class=" ">
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="http://buipalsulich.com">
+      Tyler Bui-Palsulich
+    </a>
+    <input type="checkbox" id="menu-toggle" />
+    <label class="menu-button float-right" for="menu-toggle"><i class="fas fa-bars"></i></label>
+    <ul class="navigation-list">
+      
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="http://buipalsulich.com/post/">Blog</a>
+          </li>
+        
+      
+      
+    </ul>
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container page">
+  <article>
+    <header>
+      <h1>Introduction to Finite State Transducers</h1>
+    </header>
+
+    
 
 <p><strong>Finite state transducers</strong> are the older sibling of <strong>finite state automata</strong>. If you haven&rsquo;t, take a few minutes to read through
-the <a href="/post/introduction-to-finite-state-automata/">introduction to FSA</a>.
+the <a href="http://buipalsulich.com/post/introduction-to-finite-state-automata/">introduction to FSA</a>.
 An FSA only has one tape, or feed of data: input. An FST has two: input and output. So, whenever you transition on an edge in the graph, you consume some input (possibly ε, the empty string, &ldquo;&rdquo;) and output something (possibly ε). Edges are now labeled <code>i:o</code>, where <code>i</code> is the input for the edge and <code>o</code> is the output. If the edge has a weight, the edge will be labeled <code>i:o/w</code>, where w is the weight.</p>
 
 <h3 id="openfst">OpenFST</h3>
 
 <p>Just like in the introduction to FSA, the figures in this post are made with <a href="http://openfst.org/twiki/bin/view/FST/WebHome">OpenFST</a>, an open source tool built by Google and NYU to manipulate finite state transducers. You can specify an FST to use in OpenFST with the following format:</p>
-
-<pre><code>&lt;source&gt; &lt;destination&gt; &lt;input&gt; &lt;ouput&gt; [&lt;weight&gt;]
-</code></pre>
-
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;source&gt; &lt;destination&gt; &lt;input&gt; &lt;ouput&gt; [&lt;weight&gt;]</pre></div>
 <p>Where <code>source</code> &amp; <code>destination</code> are integer IDs of states and <code>weight</code> is optional. See <a href="http://openfst.org/twiki/bin/view/FST/FstQuickTour#CreatingFsts">the OpenFST docs</a>.</p>
 
 <h3 id="example-replace-all-a-s-with-b-s">Example: Replace all <code>a</code>s with <code>b</code>s</h3>
@@ -50,43 +102,31 @@ An FSA only has one tape, or feed of data: input. An FST has two: input and outp
 <p>Let&rsquo;s say, for whatever reason, you have a thing against the letter <code>a</code>. Every <code>a</code> in your input should be replaced with a <code>b</code>. For simplicity, let&rsquo;s assume that our input alphabet is <code>{a, b, c}</code>. Here&rsquo;s an FST that does the trick:</p>
 
 <p>ascii.syms: <a href="https://gist.github.com/tbpalsulich/dc34e2533080f169606f">link</a>
-<script src="//gist.github.com/tbpalsulich/6c5e9ee09de64f17ab15.js"></script></p>
-
-<pre><code class="language-bash">$ fstcompile --isymbols=&lt;ascii.syms --osymbols=ascii.syms &lt;a href=&quot;&quot;&gt;ab.fst.txt&lt;/a&gt; &gt; ab.fst
-$ fstdraw --isymbols=ascii.syms --osymbols=ascii.syms ab.fst | dot -Tpng -Gsize=6,3 -Eheadport=e -Etailport=w &gt; ab.png
-</code></pre>
-
-<img src="http://tylerpalsulich.com/images/blog/ab.png" alt="ab.png" class="center">
+<script type="application/javascript" src="//gist.github.com/tbpalsulich/6c5e9ee09de64f17ab15.js"></script></p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ fstcompile --isymbols=&lt;ascii.syms --osymbols=ascii.syms &lt;a href=<span style="color:#0ff;font-weight:bold">&#34;&#34;</span>&gt;ab.fst.txt&lt;/a&gt; &gt; ab.fst
+$ fstdraw --isymbols=ascii.syms --osymbols=ascii.syms ab.fst | dot -Tpng -Gsize=<span style="color:#ff0;font-weight:bold">6</span>,3 -Eheadport=e -Etailport=w &gt; ab.png</code></pre></div>
+<img src="http://buipalsulich.com/images/blog/ab.png" alt="ab.png" class="center">
 
 <h3 id="example-capitalize-every-character">Example: Capitalize every character</h3>
 
 <p>You can capitalize every character of the input by mapping lowercase letters to their uppercase version and mapping uppercase letters to themselves.
-<script src="//gist.github.com/tbpalsulich/3a41392136a2c673829f.js"></script></p>
-
-<pre><code class="language-bash">$ fstcompile --isymbols=ascii.syms --osymbols=ascii.syms uppercase.fst.txt &gt; uppercase.fst
-$ fstdraw --isymbols=ascii.syms --osymbols=ascii.syms uppercase.fst | dot -Tpng -Gsize=6,3 -Eheadport=e -Etailport=w &gt; uppercase.png
-</code></pre>
-
-<img src="http://tylerpalsulich.com/images/blog/uppercase.png" alt="uppercase.png" class="center">
+<script type="application/javascript" src="//gist.github.com/tbpalsulich/3a41392136a2c673829f.js"></script></p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ fstcompile --isymbols=ascii.syms --osymbols=ascii.syms uppercase.fst.txt &gt; uppercase.fst
+$ fstdraw --isymbols=ascii.syms --osymbols=ascii.syms uppercase.fst | dot -Tpng -Gsize=<span style="color:#ff0;font-weight:bold">6</span>,3 -Eheadport=e -Etailport=w &gt; uppercase.png</code></pre></div>
+<img src="http://buipalsulich.com/images/blog/uppercase.png" alt="uppercase.png" class="center">
 
 <h3 id="composition">Composition</h3>
 
 <p>The real power of finite state transducers comes from composition. When you compose two transducers, you feed the output of one into the input of the other. We usually use ○ to indicate composition of two transducers. So <code>A = B ○ C</code>, takes the input from the user, feeds it to <code>B</code>, takes the output from <code>B</code> and feeds it to <code>C</code>, then the result is the output from <code>C</code>. So, for example, if <code>A</code> has two states with one edge <code>a:b</code>, and <code>B</code> has two states with one edge <code>b:c</code>, then <code>C</code> will have two states with one edge <code>a:c</code>.</p>
 
 <p>Let&rsquo;s try composing the &ldquo;replace every <code>a</code> with <code>b</code>&rdquo; FST from above with an FST that turns <code>b</code>s into <code>z</code>s. We&rsquo;ll start with an FST which replaces all <code>b</code>s with <code>z</code>s:
-<script src="//gist.github.com/tbpalsulich/c29dd43e42433fedf429.js"></script></p>
-
-<pre><code class="language-bash">$ fstcompile --isymbols=ascii.syms --osymbols=ascii.syms bc.fst.txt &gt; bc.fst
-</code></pre>
-
-<img src="http://tylerpalsulich.com/images/blog/bc.png" alt="bc.png" class="center">
+<script type="application/javascript" src="//gist.github.com/tbpalsulich/c29dd43e42433fedf429.js"></script></p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ fstcompile --isymbols=ascii.syms --osymbols=ascii.syms bc.fst.txt &gt; bc.fst</code></pre></div>
+<img src="http://buipalsulich.com/images/blog/bc.png" alt="bc.png" class="center">
 
 <p>Then compose our previous FST with this one:</p>
-
-<pre><code class="language-bash">fstcompose ab.fst bc.fst &gt; abc.fst
-</code></pre>
-
-<img src="http://tylerpalsulich.com/images/blog/abc.png" alt="abc.png" class="center">
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">fstcompose ab.fst bc.fst &gt; abc.fst</code></pre></div>
+<img src="http://buipalsulich.com/images/blog/abc.png" alt="abc.png" class="center">
 
 <p>With this transducer, if we input <code>abcab</code>, the output will be <code>zzczz</code>.</p>
 
@@ -94,70 +134,28 @@ $ fstdraw --isymbols=ascii.syms --osymbols=ascii.syms uppercase.fst | dot -Tpng 
 
 <p>In the next post, we&rsquo;ll create an FST to compute the <a href="http://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein edit distance</a> of two strings.</p>
 
-		        </article>
-  			</div>
-  			
-				<h5>Next, <a href="http://tylerpalsulich.com/post/levenshtein-edit-distance-with-fsts/">Levenshtein Edit Distance With FSTs</a></h5>
-			
-			
-				<p>If you have any questions or comments, please reach out to <a href="//twitter.com/tbpalsulich" target="_blank">@tbpalsulich</a>.</p>
-			
-		</section>
-		<!-- Footer -->
-<footer id="footer">
-	<ul class="sidebar">
-		<header class="major"><h3>Recent Posts:</h2></header>
-		
-			<li><a href="http://tylerpalsulich.com/post/levenshtein-edit-distance-with-fsts/" class="sidebar">Levenshtein Edit Distance With FSTs</a></li>
-		
-			<li><a href="http://tylerpalsulich.com/post/introduction-to-finite-state-transducers/" class="sidebar">Introduction to Finite State Transducers</a></li>
-		
-			<li><a href="http://tylerpalsulich.com/post/introduction-to-finite-state-automata/" class="sidebar">Introduction to Finite State Automata</a></li>
-		
-	</ul>
-	</br>
-	<ul class="sidebar">
-		<li>
-			<ul class="sidebar">
-				
-				<li><a href="//github.com/tbpalsulich" target="_blank" class="sidebar"><i class="fa fa-github"></i> github.com/tbpalsulich</a></li>
-				
-				
-				<li><a href="//twitter.com/tbpalsulich" target="_blank" class="sidebar"><i class="fa fa-twitter"></i> twitter.com/tbpalsulich</a></li>
-				
-				
-				
-				<li><a href="//linkedin.com/in/tyler-palsulich-b1183a4b" target="_blank" class="sidebar"><i class="fa fa-linkedin"></i> LinkedIn</a></li>
-				
-			</ul>
-		</li>
-		
-		<ul class="sidebar">Built with the awesome <a href="http://gohugo.io" class="sidebar">Hugo</a></ul>
-		<ul class="copyright sidebar">
-			
-			<li>&copy; Tyler Bui-Palsulich</li>
-			
-		</ul>
-	</ul>
+  </article>
+</section>
+
+
+      </div>
+
+      <footer class="footer">
+  <section class="container">
+    
+     © 2019
+    
+       · 
+      Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+    
+    
+  </section>
 </footer>
 
-<!-- Scripts -->
-<script src="http://tylerpalsulich.comjs/jquery.min.js"></script>
-<script src="http://tylerpalsulich.comjs/jquery.poptrox.min.js"></script>
-<script src="http://tylerpalsulich.comjs/skel.min.js"></script>
-<script src="http://tylerpalsulich.comjs/util.js"></script>
+    </main>
 
-<script src="http://tylerpalsulich.comjs/main.js"></script>
+    
 
+  </body>
 
-<!-- Google Analytics -->
-<script>
-var _gaq=[['_setAccount','UA-38958586-1'],['_trackPageview']];
-(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-	g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-	s.parentNode.insertBefore(g,s)}(document,'script'));
-</script>
-
-
-	</body>
 </html>

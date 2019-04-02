@@ -3,53 +3,53 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://buipalsulich.com/post/using-go-modules/</loc>
+    <loc>//buipalsulich.com/post/using-go-modules/</loc>
     <lastmod>2019-03-19T13:41:19-04:00</lastmod>
   </url>
   
   <url>
-    <loc>http://buipalsulich.com/post/appengine-go111/</loc>
+    <loc>//buipalsulich.com/post/appengine-go111/</loc>
     <lastmod>2018-10-16T13:39:55-04:00</lastmod>
   </url>
   
   <url>
-    <loc>http://buipalsulich.com/post/how-big-is-an-int-in-go/</loc>
+    <loc>//buipalsulich.com/post/how-big-is-an-int-in-go/</loc>
     <lastmod>2018-10-09T10:22:56-04:00</lastmod>
   </url>
   
   <url>
-    <loc>http://buipalsulich.com/post/levenshtein-edit-distance-with-fsts/</loc>
+    <loc>//buipalsulich.com/post/levenshtein-edit-distance-with-fsts/</loc>
     <lastmod>2015-05-17T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://buipalsulich.com/post/introduction-to-finite-state-transducers/</loc>
+    <loc>//buipalsulich.com/post/introduction-to-finite-state-transducers/</loc>
     <lastmod>2015-05-15T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://buipalsulich.com/post/introduction-to-finite-state-automata/</loc>
+    <loc>//buipalsulich.com/post/introduction-to-finite-state-automata/</loc>
     <lastmod>2015-05-12T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://buipalsulich.com/categories/</loc>
+    <loc>//buipalsulich.com/categories/</loc>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://buipalsulich.com/post/</loc>
+    <loc>//buipalsulich.com/post/</loc>
     <lastmod>2019-03-19T13:41:19-04:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://buipalsulich.com/tags/</loc>
+    <loc>//buipalsulich.com/tags/</loc>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://buipalsulich.com/</loc>
+    <loc>//buipalsulich.com/</loc>
     <lastmod>2019-03-19T13:41:19-04:00</lastmod>
     <priority>0</priority>
   </url>

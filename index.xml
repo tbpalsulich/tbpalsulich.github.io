@@ -2,66 +2,66 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tyler Bui-Palsulich</title>
-    <link>http://buipalsulich.com/</link>
+    <link>//buipalsulich.com/</link>
     <description>Recent content on Tyler Bui-Palsulich</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Tue, 19 Mar 2019 13:41:19 -0400</lastBuildDate>
     
-	<atom:link href="http://buipalsulich.com/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="//buipalsulich.com/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Using Go Modules</title>
-      <link>http://buipalsulich.com/post/using-go-modules/</link>
+      <link>//buipalsulich.com/post/using-go-modules/</link>
       <pubDate>Tue, 19 Mar 2019 13:41:19 -0400</pubDate>
       
-      <guid>http://buipalsulich.com/post/using-go-modules/</guid>
+      <guid>//buipalsulich.com/post/using-go-modules/</guid>
       <description>https://blog.golang.org/using-go-modules</description>
     </item>
     
     <item>
       <title>Announcing App Engine’s New Go 1.11 Runtime</title>
-      <link>http://buipalsulich.com/post/appengine-go111/</link>
+      <link>//buipalsulich.com/post/appengine-go111/</link>
       <pubDate>Tue, 16 Oct 2018 13:39:55 -0400</pubDate>
       
-      <guid>http://buipalsulich.com/post/appengine-go111/</guid>
+      <guid>//buipalsulich.com/post/appengine-go111/</guid>
       <description>https://blog.golang.org/appengine-go111</description>
     </item>
     
     <item>
       <title>How big is an int in Go?</title>
-      <link>http://buipalsulich.com/post/how-big-is-an-int-in-go/</link>
+      <link>//buipalsulich.com/post/how-big-is-an-int-in-go/</link>
       <pubDate>Tue, 09 Oct 2018 10:22:56 -0400</pubDate>
       
-      <guid>http://buipalsulich.com/post/how-big-is-an-int-in-go/</guid>
+      <guid>//buipalsulich.com/post/how-big-is-an-int-in-go/</guid>
       <description>https://medium.com/@tbpalsulich/how-big-is-an-int-in-go-f0e715342a32</description>
     </item>
     
     <item>
       <title>Levenshtein Edit Distance With FSTs</title>
-      <link>http://buipalsulich.com/post/levenshtein-edit-distance-with-fsts/</link>
+      <link>//buipalsulich.com/post/levenshtein-edit-distance-with-fsts/</link>
       <pubDate>Sun, 17 May 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://buipalsulich.com/post/levenshtein-edit-distance-with-fsts/</guid>
+      <guid>//buipalsulich.com/post/levenshtein-edit-distance-with-fsts/</guid>
       <description>Levenshtein edit distance is a metric to tell the difference between two strings. To measure the distance, you count the number of insertions, deletions, and substitutions required to &amp;ldquo;edit&amp;rdquo; one string into the other. For example, the edit distance of &amp;ldquo;two&amp;rdquo; and &amp;ldquo;too&amp;rdquo; is 1 &amp;ndash; substitute &amp;ldquo;w&amp;rdquo; with &amp;ldquo;o.&amp;rdquo; The most common implementation of computing the edit distance of two strings uses dynamic programming (see the Wikipedia page). We&amp;rsquo;re going to take a different route in this post &amp;ndash; finite state transducers.</description>
     </item>
     
     <item>
       <title>Introduction to Finite State Transducers</title>
-      <link>http://buipalsulich.com/post/introduction-to-finite-state-transducers/</link>
+      <link>//buipalsulich.com/post/introduction-to-finite-state-transducers/</link>
       <pubDate>Fri, 15 May 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://buipalsulich.com/post/introduction-to-finite-state-transducers/</guid>
+      <guid>//buipalsulich.com/post/introduction-to-finite-state-transducers/</guid>
       <description>Finite state transducers are the older sibling of finite state automata. If you haven&amp;rsquo;t, take a few minutes to read through the introduction to FSA. An FSA only has one tape, or feed of data: input. An FST has two: input and output. So, whenever you transition on an edge in the graph, you consume some input (possibly ε, the empty string, &amp;ldquo;&amp;rdquo;) and output something (possibly ε). Edges are now labeled i:o, where i is the input for the edge and o is the output.</description>
     </item>
     
     <item>
       <title>Introduction to Finite State Automata</title>
-      <link>http://buipalsulich.com/post/introduction-to-finite-state-automata/</link>
+      <link>//buipalsulich.com/post/introduction-to-finite-state-automata/</link>
       <pubDate>Tue, 12 May 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://buipalsulich.com/post/introduction-to-finite-state-automata/</guid>
+      <guid>//buipalsulich.com/post/introduction-to-finite-state-automata/</guid>
       <description>A finite state automaton is a graph with nodes and edges that can process input. The input is either accepted or rejected. The input is accepted if, when you are finished reading all input, you are at a final state in the automaton. You move between states (or nodes) in the automaton by consuming input. Some edges consume ε (epsilon), the empty string. A final state is usually indicated by the node having a double wall.</description>
     </item>
     

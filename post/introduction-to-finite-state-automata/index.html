@@ -16,20 +16,20 @@
     <meta property="og:title" content="Introduction to Finite State Automata" />
 <meta property="og:description" content="The basics Finite State Automata: definitions, properties, and uses." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://buipalsulich.com/post/introduction-to-finite-state-automata/" />
+<meta property="og:url" content="//buipalsulich.com/post/introduction-to-finite-state-automata/" />
 <meta property="article:published_time" content="2015-05-12T00:00:00&#43;00:00"/>
 <meta property="article:modified_time" content="2015-05-12T00:00:00&#43;00:00"/>
 
 
     
-      <base href="http://buipalsulich.com/post/introduction-to-finite-state-automata/">
+      <base href="//buipalsulich.com/post/introduction-to-finite-state-automata/">
     
     <title>
   Introduction to Finite State Automata · Tyler Bui-Palsulich
 </title>
 
     
-      <link rel="canonical" href="http://buipalsulich.com/post/introduction-to-finite-state-automata/">
+      <link rel="canonical" href="//buipalsulich.com/post/introduction-to-finite-state-automata/">
     
 
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700" rel="stylesheet">
@@ -39,7 +39,7 @@
     
       
       
-      <link rel="stylesheet" href="http://buipalsulich.com/css/coder.min.28d751104f30c16da1aa1bb04015cbe662cacfe0d1b01af4f2240ad58580069c.css" integrity="sha256-KNdREE8wwW2hqhuwQBXL5mLKz&#43;DRsBr08iQK1YWABpw=" crossorigin="anonymous" media="screen" />
+      <link rel="stylesheet" href="//buipalsulich.com/css/coder.min.28d751104f30c16da1aa1bb04015cbe662cacfe0d1b01af4f2240ad58580069c.css" integrity="sha256-KNdREE8wwW2hqhuwQBXL5mLKz&#43;DRsBr08iQK1YWABpw=" crossorigin="anonymous" media="screen" />
     
 
     
@@ -48,8 +48,8 @@
 
     
 
-    <link rel="icon" type="image/png" href="http://buipalsulich.com/images/favicon-32x32.png" sizes="32x32">
-    <link rel="icon" type="image/png" href="http://buipalsulich.com/images/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="//buipalsulich.com/images/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="//buipalsulich.com/images/favicon-16x16.png" sizes="16x16">
 
     <meta name="generator" content="Hugo 0.54.0" />
   </head>
@@ -58,7 +58,7 @@
     <main class="wrapper">
       <nav class="navigation">
   <section class="container">
-    <a class="navigation-title" href="http://buipalsulich.com">
+    <a class="navigation-title" href="//buipalsulich.com">
       Tyler Bui-Palsulich
     </a>
     <input type="checkbox" id="menu-toggle" />
@@ -67,7 +67,7 @@
       
         
           <li class="navigation-item">
-            <a class="navigation-link" href="http://buipalsulich.com/post/">Blog</a>
+            <a class="navigation-link" href="//buipalsulich.com/post/">Blog</a>
           </li>
         
       
@@ -103,7 +103,7 @@
 <script type="application/javascript" src="//gist.github.com/tbpalsulich/7fadb378a287c49902d8.js"></script></p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ fstcompile --acceptor --isymbols=ascii.syms regex.fst.txt &gt; regex.fst
 $ fstdraw --acceptor --isymbols=ascii.syms regex.fst | dot -Tpng &gt; regex.png</code></pre></div>
-<img src="http://buipalsulich.com/images/blog/regex.png" alt="regex.png" class="center">
+<img src="//buipalsulich.com/images/blog/regex.png" alt="regex.png" class="center">
 
 <p>Let&rsquo;s try processing <code>abbcc</code> with this automaton. You start at state <code>0</code> (the one with no input edges). We can&rsquo;t move to state <code>1</code>, since we won&rsquo;t be able to process our first character <code>a</code>. So, we move to state <code>2</code> on an <code>ε</code>. We stay at <code>2</code> and process the <code>a</code>. We have two <code>b</code>s next. So, we move to state <code>1</code> on an <code>ε</code>, move to <code>3</code> on a <code>b</code>, then do a loop on <code>3</code> with the second <code>b</code>. Finally, we move to state <code>4</code> on the first <code>c</code>. Then, we&rsquo;re stuck &ndash; we have input left on the stack, but no way to process it. So, the input string does not match the regular expression.</p>
 
@@ -116,7 +116,7 @@ $ fstdraw --acceptor --isymbols=ascii.syms regex.fst | dot -Tpng &gt; regex.png<
 <p>The deterministic and minimal version of the above automaton is:</p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ fstrmepsilon regex.fst | fstminimize | fstdeterminize &gt; regex.min.fst
 $ fstdraw --acceptor --isymbols=ascii.syms regex.min.fst | dot -Tpng &gt; regex.min.png</code></pre></div>
-<img src="http://buipalsulich.com/images/blog/regex.min.png" alt="regex.min.png" class="center">
+<img src="//buipalsulich.com/images/blog/regex.min.png" alt="regex.min.png" class="center">
 
 <p>Here, we exploit the fact that we can have more than one final state in our automaton. It&rsquo;s deterministic because there is exactly one option of where to go from each state &ndash; you can&rsquo;t make any decisions. It&rsquo;s minimal because you can&rsquo;t make it any smaller (<em>hand wave</em>).</p>
 
@@ -128,7 +128,7 @@ $ fstdraw --acceptor --isymbols=ascii.syms regex.min.fst | dot -Tpng &gt; regex.
 <script type="application/javascript" src="//gist.github.com/tbpalsulich/8ddbddc604271f02b3b0.js"></script></p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ fstcompile --acceptor --isymbols=ascii.syms regex.w.fst.txt | fstrmepsilon | fstminimize | fstdeterminize &gt; regex.w.fst
 $ fstdraw --acceptor --isymbols=ascii.syms regex.w.fst | dot -Tpng &gt; regex.w.png</code></pre></div>
-<img src="http://buipalsulich.com/images/blog/regex.w.png" alt="regex.w.png" class="center">
+<img src="//buipalsulich.com/images/blog/regex.w.png" alt="regex.w.png" class="center">
 
 <p>Weighted automata can be used to decide be two alternatives. For example, you&rsquo;re running a speech recognition system and the user says &ldquo;I have to go.&rdquo; How do you know the user didn&rsquo;t say, &ldquo;I have two go&rdquo;? First, you come up with a probability of words occurring next to each other (for example, <code>P(&quot;to go&quot;)</code> and <code>P(&quot;two go&quot;)</code>) &ndash; a language model. Then, you translate those probabilities into weights for your finite state machine. Then, when you&rsquo;re deciding between &ldquo;to&rdquo; and &ldquo;two&rdquo; you pick the sentence with lower weight (&ldquo;to&rdquo;).</p>
 

@@ -6,10 +6,22 @@
     <description>Recent content in Posts on Tyler Bui-Palsulich</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 19 Mar 2019 13:41:19 -0400</lastBuildDate>
+    <lastBuildDate>Mon, 29 Apr 2019 17:58:38 -0400</lastBuildDate>
     
 	<atom:link href="//buipalsulich.com/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Free HTTP Proxy with a Raspberry Pi, an SSH Tunnel, and Dynamic DNS</title>
+      <link>//buipalsulich.com/post/rpi-ssh-tunnel/</link>
+      <pubDate>Mon, 29 Apr 2019 17:58:38 -0400</pubDate>
+      
+      <guid>//buipalsulich.com/post/rpi-ssh-tunnel/</guid>
+      <description>This post details how I set up my Raspberry Pi as an HTTP proxy through an SSH tunnel.
+Disclaimer: I&amp;rsquo;m not an expert in privacy, security, networking, or anything else in this post… Proceed at your own risk. If you require privacy or security, I recommend following a different post.
+These instructions are somewhat minimal and assume you&amp;rsquo;ve worked with a Raspberry Pi and SSH in the past.
+Set up your Raspberry Pi At a high level, you’ll need to flash an SD card, plug it in, set up your network, install updates (e.</description>
+    </item>
     
     <item>
       <title>Using Go Modules</title>

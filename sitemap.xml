@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>//buipalsulich.com/post/rpi-ssh-tunnel/</loc>
+    <lastmod>2019-04-29T17:58:38-04:00</lastmod>
+  </url>
+  
+  <url>
     <loc>//buipalsulich.com/post/using-go-modules/</loc>
     <lastmod>2019-03-19T13:41:19-04:00</lastmod>
   </url>
@@ -39,7 +44,7 @@
   
   <url>
     <loc>//buipalsulich.com/post/</loc>
-    <lastmod>2019-03-19T13:41:19-04:00</lastmod>
+    <lastmod>2019-04-29T17:58:38-04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -50,7 +55,7 @@
   
   <url>
     <loc>//buipalsulich.com/</loc>
-    <lastmod>2019-03-19T13:41:19-04:00</lastmod>
+    <lastmod>2019-04-29T17:58:38-04:00</lastmod>
     <priority>0</priority>
   </url>
   

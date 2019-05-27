@@ -2,12 +2,12 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on Tyler Bui-Palsulich</title>
-    <link>//buipalsulich.com/categories/</link>
+    <link>https://buipalsulich.com/categories/</link>
     <description>Recent content in Categories on Tyler Bui-Palsulich</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     
-	<atom:link href="//buipalsulich.com/categories/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://buipalsulich.com/categories/index.xml" rel="self" type="application/rss+xml" />
     
     
   </channel>

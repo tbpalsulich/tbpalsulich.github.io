@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on Tyler Bui-Palsulich</title>
-    <link>//buipalsulich.com/post/</link>
+    <link>https://buipalsulich.com/post/</link>
     <description>Recent content in Posts on Tyler Bui-Palsulich</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Mon, 27 May 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="//buipalsulich.com/post/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://buipalsulich.com/post/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Animating the Eyes of the Go Gopher</title>
-      <link>//buipalsulich.com/post/gopher-eyes/</link>
+      <link>https://buipalsulich.com/post/gopher-eyes/</link>
       <pubDate>Mon, 27 May 2019 00:00:00 +0000</pubDate>
       
-      <guid>//buipalsulich.com/post/gopher-eyes/</guid>
+      <guid>https://buipalsulich.com/post/gopher-eyes/</guid>
       <description>Scalable Vector Graphics (SVGs) are XML based images that can scale, with built-in support for interaction and animation. You can create them with programs like Illustrator &amp;amp; Inkscape, or by typing the definitions or manually.
 I thought it would be fun to animate the eyes of the Go gopher, as you can see below (move your mouse or click/tap on the page).
  I started with an SVG gopher by tenntenn.</description>
@@ -24,10 +24,10 @@ I thought it would be fun to animate the eyes of the Go gopher, as you can see b
     
     <item>
       <title>Free HTTP Proxy with a Raspberry Pi, an SSH Tunnel, and Dynamic DNS</title>
-      <link>//buipalsulich.com/post/rpi-ssh-tunnel/</link>
+      <link>https://buipalsulich.com/post/rpi-ssh-tunnel/</link>
       <pubDate>Mon, 29 Apr 2019 17:58:38 -0400</pubDate>
       
-      <guid>//buipalsulich.com/post/rpi-ssh-tunnel/</guid>
+      <guid>https://buipalsulich.com/post/rpi-ssh-tunnel/</guid>
       <description>This post details how I set up my Raspberry Pi as an HTTP proxy through an SSH tunnel.
 Disclaimer: I&amp;rsquo;m not an expert in privacy, security, networking, or anything else in this post… Proceed at your own risk. If you require privacy or security, I recommend following a different post.
 These instructions are somewhat minimal and assume you&amp;rsquo;ve worked with a Raspberry Pi and SSH in the past.
@@ -36,55 +36,55 @@ Set up your Raspberry Pi At a high level, you’ll need to flash an SD card, plu
     
     <item>
       <title>Using Go Modules</title>
-      <link>//buipalsulich.com/post/using-go-modules/</link>
+      <link>https://buipalsulich.com/post/using-go-modules/</link>
       <pubDate>Tue, 19 Mar 2019 13:41:19 -0400</pubDate>
       
-      <guid>//buipalsulich.com/post/using-go-modules/</guid>
+      <guid>https://buipalsulich.com/post/using-go-modules/</guid>
       <description>https://blog.golang.org/using-go-modules</description>
     </item>
     
     <item>
       <title>Announcing App Engine’s New Go 1.11 Runtime</title>
-      <link>//buipalsulich.com/post/appengine-go111/</link>
+      <link>https://buipalsulich.com/post/appengine-go111/</link>
       <pubDate>Tue, 16 Oct 2018 13:39:55 -0400</pubDate>
       
-      <guid>//buipalsulich.com/post/appengine-go111/</guid>
+      <guid>https://buipalsulich.com/post/appengine-go111/</guid>
       <description>https://blog.golang.org/appengine-go111</description>
     </item>
     
     <item>
       <title>How big is an int in Go?</title>
-      <link>//buipalsulich.com/post/how-big-is-an-int-in-go/</link>
+      <link>https://buipalsulich.com/post/how-big-is-an-int-in-go/</link>
       <pubDate>Tue, 09 Oct 2018 10:22:56 -0400</pubDate>
       
-      <guid>//buipalsulich.com/post/how-big-is-an-int-in-go/</guid>
+      <guid>https://buipalsulich.com/post/how-big-is-an-int-in-go/</guid>
       <description>https://medium.com/@tbpalsulich/how-big-is-an-int-in-go-f0e715342a32</description>
     </item>
     
     <item>
       <title>Levenshtein Edit Distance With FSTs</title>
-      <link>//buipalsulich.com/post/levenshtein-edit-distance-with-fsts/</link>
+      <link>https://buipalsulich.com/post/levenshtein-edit-distance-with-fsts/</link>
       <pubDate>Sun, 17 May 2015 00:00:00 +0000</pubDate>
       
-      <guid>//buipalsulich.com/post/levenshtein-edit-distance-with-fsts/</guid>
+      <guid>https://buipalsulich.com/post/levenshtein-edit-distance-with-fsts/</guid>
       <description>Levenshtein edit distance is a metric to tell the difference between two strings. To measure the distance, you count the number of insertions, deletions, and substitutions required to &amp;ldquo;edit&amp;rdquo; one string into the other. For example, the edit distance of &amp;ldquo;two&amp;rdquo; and &amp;ldquo;too&amp;rdquo; is 1 &amp;ndash; substitute &amp;ldquo;w&amp;rdquo; with &amp;ldquo;o.&amp;rdquo; The most common implementation of computing the edit distance of two strings uses dynamic programming (see the Wikipedia page). We&amp;rsquo;re going to take a different route in this post &amp;ndash; finite state transducers.</description>
     </item>
     
     <item>
       <title>Introduction to Finite State Transducers</title>
-      <link>//buipalsulich.com/post/introduction-to-finite-state-transducers/</link>
+      <link>https://buipalsulich.com/post/introduction-to-finite-state-transducers/</link>
       <pubDate>Fri, 15 May 2015 00:00:00 +0000</pubDate>
       
-      <guid>//buipalsulich.com/post/introduction-to-finite-state-transducers/</guid>
+      <guid>https://buipalsulich.com/post/introduction-to-finite-state-transducers/</guid>
       <description>Finite state transducers are the older sibling of finite state automata. If you haven&amp;rsquo;t, take a few minutes to read through the introduction to FSA. An FSA only has one tape, or feed of data: input. An FST has two: input and output. So, whenever you transition on an edge in the graph, you consume some input (possibly ε, the empty string, &amp;ldquo;&amp;rdquo;) and output something (possibly ε). Edges are now labeled i:o, where i is the input for the edge and o is the output.</description>
     </item>
     
     <item>
       <title>Introduction to Finite State Automata</title>
-      <link>//buipalsulich.com/post/introduction-to-finite-state-automata/</link>
+      <link>https://buipalsulich.com/post/introduction-to-finite-state-automata/</link>
       <pubDate>Tue, 12 May 2015 00:00:00 +0000</pubDate>
       
-      <guid>//buipalsulich.com/post/introduction-to-finite-state-automata/</guid>
+      <guid>https://buipalsulich.com/post/introduction-to-finite-state-automata/</guid>
       <description>A finite state automaton is a graph with nodes and edges that can process input. The input is either accepted or rejected. The input is accepted if, when you are finished reading all input, you are at a final state in the automaton. You move between states (or nodes) in the automaton by consuming input. Some edges consume ε (epsilon), the empty string. A final state is usually indicated by the node having a double wall.</description>
     </item>
     

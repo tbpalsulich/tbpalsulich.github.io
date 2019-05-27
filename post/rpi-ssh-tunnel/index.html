@@ -10,7 +10,7 @@
     <meta name="keywords" content="blog,developer,personal">
 
     <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="//buipalsulich.com/images/blog/proxy/tunnel.png"/>
+<meta name="twitter:image" content="https://buipalsulich.com/images/blog/proxy/tunnel.png"/>
 
 <meta name="twitter:title" content="Free HTTP Proxy with a Raspberry Pi, an SSH Tunnel, and Dynamic DNS"/>
 <meta name="twitter:description" content="This post details how I set up my Raspberry Pi as an HTTP proxy through an SSH tunnel.
@@ -25,22 +25,22 @@ Disclaimer: I&rsquo;m not an expert in privacy, security, networking, or anythin
 These instructions are somewhat minimal and assume you&rsquo;ve worked with a Raspberry Pi and SSH in the past.
 Set up your Raspberry Pi At a high level, you’ll need to flash an SD card, plug it in, set up your network, install updates (e." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="//buipalsulich.com/post/rpi-ssh-tunnel/" />
+<meta property="og:url" content="https://buipalsulich.com/post/rpi-ssh-tunnel/" />
 
-<meta property="og:image" content="//buipalsulich.com/images/blog/proxy/tunnel.png" />
+<meta property="og:image" content="https://buipalsulich.com/images/blog/proxy/tunnel.png" />
 <meta property="article:published_time" content="2019-04-29T17:58:38-04:00"/>
 <meta property="article:modified_time" content="2019-04-29T17:58:38-04:00"/>
 
 
     
-      <base href="//buipalsulich.com/post/rpi-ssh-tunnel/">
+      <base href="https://buipalsulich.com/post/rpi-ssh-tunnel/">
     
     <title>
   Free HTTP Proxy with a Raspberry Pi, an SSH Tunnel, and Dynamic DNS · Tyler Bui-Palsulich
 </title>
 
     
-      <link rel="canonical" href="//buipalsulich.com/post/rpi-ssh-tunnel/">
+      <link rel="canonical" href="https://buipalsulich.com/post/rpi-ssh-tunnel/">
     
 
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700" rel="stylesheet">
@@ -50,7 +50,7 @@ Set up your Raspberry Pi At a high level, you’ll need to flash an SD card, plu
     
       
       
-      <link rel="stylesheet" href="//buipalsulich.com/css/coder.min.28d751104f30c16da1aa1bb04015cbe662cacfe0d1b01af4f2240ad58580069c.css" integrity="sha256-KNdREE8wwW2hqhuwQBXL5mLKz&#43;DRsBr08iQK1YWABpw=" crossorigin="anonymous" media="screen" />
+      <link rel="stylesheet" href="https://buipalsulich.com/css/coder.min.28d751104f30c16da1aa1bb04015cbe662cacfe0d1b01af4f2240ad58580069c.css" integrity="sha256-KNdREE8wwW2hqhuwQBXL5mLKz&#43;DRsBr08iQK1YWABpw=" crossorigin="anonymous" media="screen" />
     
 
     
@@ -61,8 +61,8 @@ Set up your Raspberry Pi At a high level, you’ll need to flash an SD card, plu
 
     
 
-    <link rel="icon" type="image/png" href="//buipalsulich.com/images/favicon-32x32.png" sizes="32x32">
-    <link rel="icon" type="image/png" href="//buipalsulich.com/images/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="https://buipalsulich.com/images/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://buipalsulich.com/images/favicon-16x16.png" sizes="16x16">
 
     <meta name="generator" content="Hugo 0.54.0" />
   </head>
@@ -71,7 +71,7 @@ Set up your Raspberry Pi At a high level, you’ll need to flash an SD card, plu
     <main class="wrapper">
       <nav class="navigation">
   <section class="container">
-    <a class="navigation-title" href="//buipalsulich.com">
+    <a class="navigation-title" href="https://buipalsulich.com">
       Tyler Bui-Palsulich
     </a>
     <input type="checkbox" id="menu-toggle" />
@@ -80,7 +80,7 @@ Set up your Raspberry Pi At a high level, you’ll need to flash an SD card, plu
       
         
           <li class="navigation-item">
-            <a class="navigation-link" href="//buipalsulich.com/post/">Blog</a>
+            <a class="navigation-link" href="https://buipalsulich.com/post/">Blog</a>
           </li>
         
       
@@ -163,7 +163,7 @@ http_access allow localnet</pre></div>
 <p>You&rsquo;ll also want to create a tunnel to send traffic from a local port (on your laptop) to the <code>squid</code> proxy we started on the Pi above. Pick a port you want the tunnel to connect to on your laptop (let&rsquo;s say <code>8080</code>) and say to tunnel that to <code>192.168.0.2:3128</code> (or <code>[whatever your Pi's local IP is]:[the squid port]</code>). In PuTTY, this is under <code>Connection &gt; SSH &gt; Tunnels</code> in the left-hand menu.</p>
 
 <figure>
-    <img src="//buipalsulich.com/images/blog/proxy/putty.png"
+    <img src="https://buipalsulich.com/images/blog/proxy/putty.png"
          alt="Putty SSH tunnel settings." width="400px"/> <figcaption>
             <p>Putty SSH tunnel settings.</p>
         </figcaption>
@@ -173,7 +173,7 @@ http_access allow localnet</pre></div>
 <p>On your laptop, <code>localhost:8080</code> will be sent through the SSH tunnel to <code>squid</code> running on your Raspberry Pi (<code>192.168.0.2:3128</code>). The SSH connection goes from your laptop to the port you exposed from your router (<code>8888</code>) to port <code>22</code> of your Pi.</p>
 
 <figure>
-    <img src="//buipalsulich.com/images/blog/proxy/tunnel.png"
+    <img src="https://buipalsulich.com/images/blog/proxy/tunnel.png"
          alt="Architecture diagram of the proxy through the SSH tunnel."/> <figcaption>
             <p>Architecture diagram of the proxy through the SSH tunnel.</p>
         </figcaption>
@@ -189,7 +189,7 @@ http_access allow localnet</pre></div>
 <p>On Windows, open your proxy settings and add an entry with Address <code>localhost</code> and Port <code>8080</code> (or whatever port you configured with your SSH client). Here&rsquo;s what it looks like on my computer:</p>
 
 <figure>
-    <img src="//buipalsulich.com/images/blog/proxy/windows_settings.png"
+    <img src="https://buipalsulich.com/images/blog/proxy/windows_settings.png"
          alt="&amp;lsquo;Manual proxy setup&amp;rsquo; windows settings."/> <figcaption>
             <p>&lsquo;Manual proxy setup&rsquo; windows settings.</p>
         </figcaption>

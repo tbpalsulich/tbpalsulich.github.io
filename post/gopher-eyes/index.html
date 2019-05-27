@@ -10,7 +10,7 @@
     <meta name="keywords" content="blog,developer,personal">
 
     <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="//buipalsulich.com/images/blog/gopher-eyes/gopher.png"/>
+<meta name="twitter:image" content="https://buipalsulich.com/images/blog/gopher-eyes/gopher.png"/>
 
 <meta name="twitter:title" content="Animating the Eyes of the Go Gopher"/>
 <meta name="twitter:description" content="How to animate the Go gopher&#39;s eyes."/>
@@ -19,22 +19,22 @@
     <meta property="og:title" content="Animating the Eyes of the Go Gopher" />
 <meta property="og:description" content="How to animate the Go gopher&#39;s eyes." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="//buipalsulich.com/post/gopher-eyes/" />
+<meta property="og:url" content="https://buipalsulich.com/post/gopher-eyes/" />
 
-<meta property="og:image" content="//buipalsulich.com/images/blog/gopher-eyes/gopher.png" />
+<meta property="og:image" content="https://buipalsulich.com/images/blog/gopher-eyes/gopher.png" />
 <meta property="article:published_time" content="2019-05-27T00:00:00&#43;00:00"/>
 <meta property="article:modified_time" content="2019-05-27T00:00:00&#43;00:00"/>
 
 
     
-      <base href="//buipalsulich.com/post/gopher-eyes/">
+      <base href="https://buipalsulich.com/post/gopher-eyes/">
     
     <title>
   Animating the Eyes of the Go Gopher · Tyler Bui-Palsulich
 </title>
 
     
-      <link rel="canonical" href="//buipalsulich.com/post/gopher-eyes/">
+      <link rel="canonical" href="https://buipalsulich.com/post/gopher-eyes/">
     
 
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700" rel="stylesheet">
@@ -44,7 +44,7 @@
     
       
       
-      <link rel="stylesheet" href="//buipalsulich.com/css/coder.min.28d751104f30c16da1aa1bb04015cbe662cacfe0d1b01af4f2240ad58580069c.css" integrity="sha256-KNdREE8wwW2hqhuwQBXL5mLKz&#43;DRsBr08iQK1YWABpw=" crossorigin="anonymous" media="screen" />
+      <link rel="stylesheet" href="https://buipalsulich.com/css/coder.min.28d751104f30c16da1aa1bb04015cbe662cacfe0d1b01af4f2240ad58580069c.css" integrity="sha256-KNdREE8wwW2hqhuwQBXL5mLKz&#43;DRsBr08iQK1YWABpw=" crossorigin="anonymous" media="screen" />
     
 
     
@@ -55,8 +55,8 @@
 
     
 
-    <link rel="icon" type="image/png" href="//buipalsulich.com/images/favicon-32x32.png" sizes="32x32">
-    <link rel="icon" type="image/png" href="//buipalsulich.com/images/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="https://buipalsulich.com/images/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://buipalsulich.com/images/favicon-16x16.png" sizes="16x16">
 
     <meta name="generator" content="Hugo 0.54.0" />
   </head>
@@ -65,7 +65,7 @@
     <main class="wrapper">
       <nav class="navigation">
   <section class="container">
-    <a class="navigation-title" href="//buipalsulich.com">
+    <a class="navigation-title" href="https://buipalsulich.com">
       Tyler Bui-Palsulich
     </a>
     <input type="checkbox" id="menu-toggle" />
@@ -74,7 +74,7 @@
       
         
           <li class="navigation-item">
-            <a class="navigation-link" href="//buipalsulich.com/post/">Blog</a>
+            <a class="navigation-link" href="https://buipalsulich.com/post/">Blog</a>
           </li>
         
       
@@ -193,13 +193,13 @@
 
 <p>Given the location of the eye and the location of the mouse, I calculated the angle between the two using <code>arctan</code>. Given the ratio of &ldquo;opposite&rdquo; over &ldquo;adjacent,&rdquo; arctan gives you the corresponding angle.</p>
 
-<img src="//buipalsulich.com/images/blog/gopher-eyes/arctan.svg" alt="gopher-eyes/arctan.svg" class="center">
+<img src="https://buipalsulich.com/images/blog/gopher-eyes/arctan.svg" alt="gopher-eyes/arctan.svg" class="center">
 
 <p>The goal is to rotate the pupil and glare of the eyes this same angle, toward the mouse.</p>
 
 <p>The transformation first moves the element (either the pupil or the glare) the correct distance along the positive x-axis, then rotates it toward the mouse.</p>
 
-<img src="//buipalsulich.com/images/blog/gopher-eyes/transform.svg" alt="gopher-eyes/transform.svg" class="center">
+<img src="https://buipalsulich.com/images/blog/gopher-eyes/transform.svg" alt="gopher-eyes/transform.svg" class="center">
 
 <p>We can use the distance between the eye and the mouse to decide how far away from the center of the eye we want to move the pupil and glare. I capped mine at 200px, meaning once the mouse is 200px away, the pupil and glare will be at the far edge of the eye.</p>
 
@@ -311,7 +311,7 @@ document.<span style="color:#a6e22e">onclick</span> <span style="color:#f92672">
 </g>
 </svg>
 
-<script src="//buipalsulich.com/js/gopher-eyes.js"></script>
+<script src="https://buipalsulich.com/js/gopher-eyes.js"></script>
 
   </article>
 </section>

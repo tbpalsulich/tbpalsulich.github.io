@@ -12,6 +12,7 @@
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Levenshtein Edit Distance With FSTs"/>
 <meta name="twitter:description" content="How to use finite state transducers to compute the difference between two strings."/>
+<meta name="twitter:site" content="@tbpalsulich"/>
 
     <meta property="og:title" content="Levenshtein Edit Distance With FSTs" />
 <meta property="og:description" content="How to use finite state transducers to compute the difference between two strings." />
@@ -40,6 +41,8 @@
       
       
       <link rel="stylesheet" href="//buipalsulich.com/css/coder.min.28d751104f30c16da1aa1bb04015cbe662cacfe0d1b01af4f2240ad58580069c.css" integrity="sha256-KNdREE8wwW2hqhuwQBXL5mLKz&#43;DRsBr08iQK1YWABpw=" crossorigin="anonymous" media="screen" />
+    
+
     
 
     
@@ -102,14 +105,14 @@
 <script type="application/javascript" src="//gist.github.com/tbpalsulich/bd1e1119923b3e1e8007.js"></script></p>
 
 <p>Now we can put it all together:</p>
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ python make_T.py | fstcompile --isymbols=ascii.syms --osymbols=ascii.syms &gt; T.fst
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ python make_T.py | fstcompile --isymbols<span style="color:#f92672">=</span>ascii.syms --osymbols<span style="color:#f92672">=</span>ascii.syms &gt; T.fst
 $ draw T</code></pre></div>
 <img src="//buipalsulich.com/images/blog/T.png" alt="T.png" class="center">
 
 <p>From the top to the bottom of the image, we replace characters (e.g. <code>c:b/1</code>), insert characters (e.g. <code>ε:c/1</code>), delete characters (e.g. <code>c:ε/1</code>), and leave characters unedited (e.g. <code>c:c</code>). So, how do we actually use this? Let&rsquo;s start with the input. Here&rsquo;s what happens when you take <code>abc</code> and compose it with the above:</p>
 
 <script type="application/javascript" src="//gist.github.com/tbpalsulich/ea410f2d1a4e6489c3f2.js"></script>
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ fstcompile --isymbols=ascii.syms --osymbols=ascii.syms abc.fst.txt &gt; abc.fst
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ fstcompile --isymbols<span style="color:#f92672">=</span>ascii.syms --osymbols<span style="color:#f92672">=</span>ascii.syms abc.fst.txt &gt; abc.fst
 $ fstcompose abc.fst T.fst &gt; T_abc.fst
 $ draw T_abc</code></pre></div>
 <img src="//buipalsulich.com/images/blog/T_abc.png" alt="T_abc.png" class="center">
@@ -119,18 +122,18 @@ $ draw T_abc</code></pre></div>
 <h3 id="using-the-edit-transducer">Using the Edit Transducer</h3>
 
 <p>When we&rsquo;re trying to edit one string into another (to compute the edit distance), we don&rsquo;t want to score <em>all</em> possible edits of the first string &ndash; we only want the ones that are equal to the second string. So, how can we restrict the <code>T_abc.fst</code> output to only show the edits which end up outputting our second string? Another composition!</p>
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ fstcompile --isymbols=ascii.syms --osymbols=ascii.syms cba.fst.txt &gt; cba.fst
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ fstcompile --isymbols<span style="color:#f92672">=</span>ascii.syms --osymbols<span style="color:#f92672">=</span>ascii.syms cba.fst.txt &gt; cba.fst
 $ fstcompose abc.fst T.fst | fstcompose - cba.fst &gt; abc_T_cba.fst
 $ draw abc_T_cba</code></pre></div>
 <img src="//buipalsulich.com/images/blog/abc_T_cba.png" alt="abc_T_cba.png" class="center">
 
 <p>This transducer gives us a lattice of all of the edits we can make which can turn <code>abc</code> into <code>cba</code>. No matter what path you take from state 0 to state 11, you will end up with the string <code>cba</code>. For example, if you trace the path <code>0 → 1 → 4 → 4 → 5 → 8 → 11</code>, you delete <code>a</code>, delete <code>b</code>, delete <code>c</code>, insert <code>c</code>, insert <code>b</code>, and insert <code>a</code> (for a total cost of 6). The shortest (lowest cost) path is <code>0 → 3 → 8 → 11</code> (replace <code>c</code> with <code>a</code>, don&rsquo;t edit <code>b</code>, and replace <code>a</code> with <code>c</code> for a total cost of 2). Here&rsquo;s how to calculate the distance with OpenFST:</p>
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ fstshortestpath abc_T_cba.fst &gt; shortest.fst
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ fstshortestpath abc_T_cba.fst &gt; shortest.fst
 $ draw shortest</code></pre></div>
 <img src="//buipalsulich.com/images/blog/shortest.png" alt="shortest.png" class="center">
 
 <p>Now, we can compute the Levenshtein edit distance between any two strings in our alphabet! For example:</p>
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ fstcompose cbacbabcaab.fst T.fst | fstcompose - abcbcbcac.fst | fstshortestpath &gt; shortest2.fst
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ fstcompose cbacbabcaab.fst T.fst | fstcompose - abcbcbcac.fst | fstshortestpath &gt; shortest2.fst
 $ draw shortest2</pre></div>
 <img src="//buipalsulich.com/images/blog/shortest2.png" alt="shortest2.png" class="center">
 
@@ -155,6 +158,19 @@ $ draw shortest2</pre></div>
     </main>
 
     
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-140913492-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
 
   </body>
 

@@ -6,10 +6,21 @@
     <description>Recent content on Tyler Bui-Palsulich</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 29 Apr 2019 17:58:38 -0400</lastBuildDate>
+    <lastBuildDate>Mon, 27 May 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="//buipalsulich.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Animating the Eyes of the Go Gopher</title>
+      <link>//buipalsulich.com/post/gopher-eyes/</link>
+      <pubDate>Mon, 27 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>//buipalsulich.com/post/gopher-eyes/</guid>
+      <description>Scalable Vector Graphics (SVGs) are XML based images that can scale, with built-in support for interaction and animation. You can create them with programs like Illustrator &amp;amp; Inkscape, or by typing the definitions or manually.
+I thought it would be fun to animate the eyes of the Go gopher, as you can see below (move your mouse or click/tap on the page).
+ I started with an SVG gopher by tenntenn.</description>
+    </item>
     
     <item>
       <title>Free HTTP Proxy with a Raspberry Pi, an SSH Tunnel, and Dynamic DNS</title>

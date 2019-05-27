@@ -12,6 +12,7 @@
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Introduction to Finite State Transducers"/>
 <meta name="twitter:description" content="An introduction to finite state transducers: examples, composition, and motivation."/>
+<meta name="twitter:site" content="@tbpalsulich"/>
 
     <meta property="og:title" content="Introduction to Finite State Transducers" />
 <meta property="og:description" content="An introduction to finite state transducers: examples, composition, and motivation." />
@@ -40,6 +41,8 @@
       
       
       <link rel="stylesheet" href="//buipalsulich.com/css/coder.min.28d751104f30c16da1aa1bb04015cbe662cacfe0d1b01af4f2240ad58580069c.css" integrity="sha256-KNdREE8wwW2hqhuwQBXL5mLKz&#43;DRsBr08iQK1YWABpw=" crossorigin="anonymous" media="screen" />
+    
+
     
 
     
@@ -94,7 +97,7 @@ An FSA only has one tape, or feed of data: input. An FST has two: input and outp
 <h3 id="openfst">OpenFST</h3>
 
 <p>Just like in the introduction to FSA, the figures in this post are made with <a href="http://openfst.org/twiki/bin/view/FST/WebHome">OpenFST</a>, an open source tool built by Google and NYU to manipulate finite state transducers. You can specify an FST to use in OpenFST with the following format:</p>
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;source&gt; &lt;destination&gt; &lt;input&gt; &lt;ouput&gt; [&lt;weight&gt;]</pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;source&gt; &lt;destination&gt; &lt;input&gt; &lt;ouput&gt; [&lt;weight&gt;]</pre></div>
 <p>Where <code>source</code> &amp; <code>destination</code> are integer IDs of states and <code>weight</code> is optional. See <a href="http://openfst.org/twiki/bin/view/FST/FstQuickTour#CreatingFsts">the OpenFST docs</a>.</p>
 
 <h3 id="example-replace-all-a-s-with-b-s">Example: Replace all <code>a</code>s with <code>b</code>s</h3>
@@ -103,16 +106,16 @@ An FSA only has one tape, or feed of data: input. An FST has two: input and outp
 
 <p>ascii.syms: <a href="https://gist.github.com/tbpalsulich/dc34e2533080f169606f">link</a>
 <script type="application/javascript" src="//gist.github.com/tbpalsulich/6c5e9ee09de64f17ab15.js"></script></p>
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ fstcompile --isymbols=&lt;ascii.syms --osymbols=ascii.syms &lt;a href=<span style="color:#0ff;font-weight:bold">&#34;&#34;</span>&gt;ab.fst.txt&lt;/a&gt; &gt; ab.fst
-$ fstdraw --isymbols=ascii.syms --osymbols=ascii.syms ab.fst | dot -Tpng -Gsize=<span style="color:#ff0;font-weight:bold">6</span>,3 -Eheadport=e -Etailport=w &gt; ab.png</code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ fstcompile --isymbols<span style="color:#f92672">=</span>&lt;ascii.syms --osymbols<span style="color:#f92672">=</span>ascii.syms &lt;a href<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span>&gt;ab.fst.txt&lt;/a&gt; &gt; ab.fst
+$ fstdraw --isymbols<span style="color:#f92672">=</span>ascii.syms --osymbols<span style="color:#f92672">=</span>ascii.syms ab.fst | dot -Tpng -Gsize<span style="color:#f92672">=</span><span style="color:#ae81ff">6</span>,3 -Eheadport<span style="color:#f92672">=</span>e -Etailport<span style="color:#f92672">=</span>w &gt; ab.png</code></pre></div>
 <img src="//buipalsulich.com/images/blog/ab.png" alt="ab.png" class="center">
 
 <h3 id="example-capitalize-every-character">Example: Capitalize every character</h3>
 
 <p>You can capitalize every character of the input by mapping lowercase letters to their uppercase version and mapping uppercase letters to themselves.
 <script type="application/javascript" src="//gist.github.com/tbpalsulich/3a41392136a2c673829f.js"></script></p>
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ fstcompile --isymbols=ascii.syms --osymbols=ascii.syms uppercase.fst.txt &gt; uppercase.fst
-$ fstdraw --isymbols=ascii.syms --osymbols=ascii.syms uppercase.fst | dot -Tpng -Gsize=<span style="color:#ff0;font-weight:bold">6</span>,3 -Eheadport=e -Etailport=w &gt; uppercase.png</code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ fstcompile --isymbols<span style="color:#f92672">=</span>ascii.syms --osymbols<span style="color:#f92672">=</span>ascii.syms uppercase.fst.txt &gt; uppercase.fst
+$ fstdraw --isymbols<span style="color:#f92672">=</span>ascii.syms --osymbols<span style="color:#f92672">=</span>ascii.syms uppercase.fst | dot -Tpng -Gsize<span style="color:#f92672">=</span><span style="color:#ae81ff">6</span>,3 -Eheadport<span style="color:#f92672">=</span>e -Etailport<span style="color:#f92672">=</span>w &gt; uppercase.png</code></pre></div>
 <img src="//buipalsulich.com/images/blog/uppercase.png" alt="uppercase.png" class="center">
 
 <h3 id="composition">Composition</h3>
@@ -121,11 +124,11 @@ $ fstdraw --isymbols=ascii.syms --osymbols=ascii.syms uppercase.fst | dot -Tpng 
 
 <p>Let&rsquo;s try composing the &ldquo;replace every <code>a</code> with <code>b</code>&rdquo; FST from above with an FST that turns <code>b</code>s into <code>z</code>s. We&rsquo;ll start with an FST which replaces all <code>b</code>s with <code>z</code>s:
 <script type="application/javascript" src="//gist.github.com/tbpalsulich/c29dd43e42433fedf429.js"></script></p>
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ fstcompile --isymbols=ascii.syms --osymbols=ascii.syms bc.fst.txt &gt; bc.fst</code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ fstcompile --isymbols<span style="color:#f92672">=</span>ascii.syms --osymbols<span style="color:#f92672">=</span>ascii.syms bc.fst.txt &gt; bc.fst</code></pre></div>
 <img src="//buipalsulich.com/images/blog/bc.png" alt="bc.png" class="center">
 
 <p>Then compose our previous FST with this one:</p>
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">fstcompose ab.fst bc.fst &gt; abc.fst</code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">fstcompose ab.fst bc.fst &gt; abc.fst</code></pre></div>
 <img src="//buipalsulich.com/images/blog/abc.png" alt="abc.png" class="center">
 
 <p>With this transducer, if we input <code>abcab</code>, the output will be <code>zzczz</code>.</p>
@@ -155,6 +158,19 @@ $ fstdraw --isymbols=ascii.syms --osymbols=ascii.syms uppercase.fst | dot -Tpng 
     </main>
 
     
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-140913492-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
 
   </body>
 

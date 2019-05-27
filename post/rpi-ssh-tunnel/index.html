@@ -17,6 +17,7 @@
 Disclaimer: I&rsquo;m not an expert in privacy, security, networking, or anything else in this post… Proceed at your own risk. If you require privacy or security, I recommend following a different post.
 These instructions are somewhat minimal and assume you&rsquo;ve worked with a Raspberry Pi and SSH in the past.
 Set up your Raspberry Pi At a high level, you’ll need to flash an SD card, plug it in, set up your network, install updates (e."/>
+<meta name="twitter:site" content="@tbpalsulich"/>
 
     <meta property="og:title" content="Free HTTP Proxy with a Raspberry Pi, an SSH Tunnel, and Dynamic DNS" />
 <meta property="og:description" content="This post details how I set up my Raspberry Pi as an HTTP proxy through an SSH tunnel.
@@ -50,6 +51,8 @@ Set up your Raspberry Pi At a high level, you’ll need to flash an SD card, plu
       
       
       <link rel="stylesheet" href="//buipalsulich.com/css/coder.min.28d751104f30c16da1aa1bb04015cbe662cacfe0d1b01af4f2240ad58580069c.css" integrity="sha256-KNdREE8wwW2hqhuwQBXL5mLKz&#43;DRsBr08iQK1YWABpw=" crossorigin="anonymous" media="screen" />
+    
+
     
 
     
@@ -127,16 +130,16 @@ Set up your Raspberry Pi At a high level, you’ll need to flash an SD card, plu
 <p>I&rsquo;m using <a href="http://www.squid-cache.org/"><code>squid</code></a>.</p>
 
 <p>Install it with:</p>
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4">sudo apt-get install squid3</pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">sudo apt-get install squid3</pre></div>
 <p>Then configure the <code>/etc/squid/squid.conf</code> file. Make a backup first just in case:</p>
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4">sudo cp /etc/squid/squid.conf /etc/squid/squid.conf.backup</pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">sudo cp /etc/squid/squid.conf /etc/squid/squid.conf.backup</pre></div>
 <p>Then edit <code>/etc/squid/squid.conf</code> to have the following two lines:</p>
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4">acl localnet src 192.168.86.0/24
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">acl localnet src 192.168.86.0/24
 http_access allow localnet</pre></div>
 <p>This allows access to the proxy from your <code>localnet</code>. Replace the IP address block with your local IP address block.</p>
 
 <p>Then restart the <code>squid</code> service:</p>
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4">sudo service squid restart</pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">sudo service squid restart</pre></div>
 <p>By default, <code>squid</code> listens on port <code>3128</code>. You&rsquo;ll need this when creating the tunnel later.</p>
 
 <h2 id="configure-your-router">Configure your router</h2>
@@ -218,9 +221,9 @@ But, the IP address might change at any time. So, you have two options:</p>
 <p>I&rsquo;m using Google Domains for my domain. So, I followed <a href="https://support.google.com/domains/answer/6147083?hl=en">their official instructions</a> for setting up a subdomain for Dynamic DNS. There are many other providers of dynamic DNS services, but this one was easiest for me.</p>
 
 <p>The Raspberry Pi needs to be configured to periodically ping the DNS server. I&rsquo;m using <code>ddclient</code>:</p>
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4">sudo apt-get install ddclient</pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">sudo apt-get install ddclient</pre></div>
 <p>This will take you through a series of dialogs to configure it, but it didn&rsquo;t work well for me. Google Domains is natively supported by <code>ddclient</code>, so I edited my config following the Google Domains docs:</p>
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4">ssl=yes
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">ssl=yes
 use=web
 protocol=googledomains
 login=VGhpcyBpcyBub3QgdGhlIHJlYWwgbG9naW4u
@@ -229,9 +232,9 @@ example.example.com</pre></div>
 <p>I added <code>use=web</code> so <code>ddclient</code> grabs the IP adress from a web service, rather than locally.</p>
 
 <p>Then make sure the <code>ddclient</code> service is started:</p>
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4">sudo service ddclient restart</pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">sudo service ddclient restart</pre></div>
 <p>You can make sure the IP address is being polled properly and authentication with the DNS service is working by running:</p>
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4">sudo ddclient -query
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">sudo ddclient -query
 sudo ddclient -daemon=0 -debug -verbose -noquiet</pre></div>
 <h2 id="conclusion">Conclusion</h2>
 
@@ -269,6 +272,19 @@ sudo ddclient -daemon=0 -debug -verbose -noquiet</pre></div>
     </main>
 
     
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-140913492-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
 
   </body>
 

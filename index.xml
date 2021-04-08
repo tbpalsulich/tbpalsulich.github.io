@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tyler Bui-Palsulich</title>
@@ -6,11 +6,7 @@
     <description>Recent content on Tyler Bui-Palsulich</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 27 May 2019 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://buipalsulich.com/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Mon, 27 May 2019 00:00:00 +0000</lastBuildDate><atom:link href="https://buipalsulich.com/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Animating the Eyes of the Go Gopher</title>
       <link>https://buipalsulich.com/post/gopher-eyes/</link>
@@ -76,7 +72,7 @@ Set up your Raspberry Pi At a high level, you’ll need to flash an SD card, plu
       <pubDate>Fri, 15 May 2015 00:00:00 +0000</pubDate>
       
       <guid>https://buipalsulich.com/post/introduction-to-finite-state-transducers/</guid>
-      <description>Finite state transducers are the older sibling of finite state automata. If you haven&amp;rsquo;t, take a few minutes to read through the introduction to FSA. An FSA only has one tape, or feed of data: input. An FST has two: input and output. So, whenever you transition on an edge in the graph, you consume some input (possibly ε, the empty string, &amp;ldquo;&amp;rdquo;) and output something (possibly ε). Edges are now labeled i:o, where i is the input for the edge and o is the output.</description>
+      <description>Finite state transducers are the older sibling of finite state automata. If you haven&amp;rsquo;t, take a few minutes to read through the introduction to FSA. An FSA only has one tape, or feed of data: input. An FST has two: input and output. So, whenever you transition on an edge in the graph, you consume some input (possibly ε, the empty string, &amp;ldquo;&amp;quot;) and output something (possibly ε). Edges are now labeled i:o, where i is the input for the edge and o is the output.</description>
     </item>
     
     <item>

@@ -17,9 +17,10 @@
     <meta property="og:title" content="Introduction to Finite State Automata" />
 <meta property="og:description" content="The basics Finite State Automata: definitions, properties, and uses." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://buipalsulich.com/post/introduction-to-finite-state-automata/" />
-<meta property="article:published_time" content="2015-05-12T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2015-05-12T00:00:00&#43;00:00"/>
+<meta property="og:url" content="https://buipalsulich.com/post/introduction-to-finite-state-automata/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2015-05-12T00:00:00&#43;00:00" />
+<meta property="article:modified_time" content="2015-05-12T00:00:00&#43;00:00" />
+
 
 
     
@@ -49,12 +50,10 @@
 
     
 
-    
-
     <link rel="icon" type="image/png" href="https://buipalsulich.com/images/favicon-32x32.png" sizes="32x32">
     <link rel="icon" type="image/png" href="https://buipalsulich.com/images/favicon-16x16.png" sizes="16x16">
 
-    <meta name="generator" content="Hugo 0.54.0" />
+    <meta name="generator" content="Hugo 0.82.0" />
   </head>
 
   <body class=" ">
@@ -88,53 +87,36 @@
       <h1>Introduction to Finite State Automata</h1>
     </header>
 
-    
-
-<p>A <strong>finite state automaton</strong> is a graph with nodes and edges that can process input. The input is either accepted or rejected. The input is accepted if, when you are finished reading all input, you are at a final state in the automaton. You move between states (or nodes) in the automaton by consuming input. Some edges consume ε (epsilon), the empty string. A final state is usually indicated by the node having a double wall. That&rsquo;s it.</p>
-
+    <p>A <strong>finite state automaton</strong> is a graph with nodes and edges that can process input. The input is either accepted or rejected. The input is accepted if, when you are finished reading all input, you are at a final state in the automaton. You move between states (or nodes) in the automaton by consuming input. Some edges consume ε (epsilon), the empty string. A final state is usually indicated by the node having a double wall. That&rsquo;s it.</p>
 <p>The figures in this post are made with <a href="http://openfst.org/twiki/bin/view/FST/WebHome">OpenFST</a>, an open source tool built by Google and NYU to manipulate finite state transducers (the older sibling of finite state automata).</p>
-
 <p>Finite state automata can be used to process regular expressions, do natural language processing, speech recognition, and more. How? Let&rsquo;s start with regular expressions. NLP and speech, that&rsquo;s another post.</p>
-
 <h3 id="regular-expressions">Regular Expressions</h3>
-
 <p>This is not meant to be a guide to regular expressions. <a href="http://en.wikipedia.org/wiki/Regular_expression">There</a> <a href="https://www.dmoz.org/Computers/Programming/Languages/Regular_Expressions">are</a> <a href="https://pythonspot.com/regular-expressions/">plenty</a> <a href="http://www.regular-expressions.info/tutorial.html">of</a> <a href="https://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=2&amp;cad=rja&amp;uact=8&amp;ved=0CCoQFjAB&amp;url=http%3A%2F%2Fregexone.com%2F&amp;ei=RUNSVcGsIIioyATe34D4Dg&amp;usg=AFQjCNFY6sjioVEzGfkfcS9NfAlBzjV2eA&amp;sig2=gqb49-fgzelsy5Jxf_ghTA">those</a> <a href="http://www.zytrax.com/tech/web/regex.htm">elsewhere</a>. I will assume you&rsquo;re familiar with the syntax and meaning. For example, <code>a*b+c?</code> matches <code>bc</code>, but not <code>abbcc</code>. To represent this expression with a finite state automaton, we&rsquo;ll use <a href="http://en.wikipedia.org/wiki/Thompson%27s_construction_algorithm">Thomson&rsquo;s construction algorithm</a>. Take a minute to read through that page. So, we end up with the following slightly reduced automaton:</p>
-
 <p>ascii.syms: <a href="https://gist.github.com/tbpalsulich/dc34e2533080f169606f">link</a></p>
-
-<p>Note: <code>&amp;#949;</code> is the code for &#949;, the empty string.
-<script type="application/javascript" src="//gist.github.com/tbpalsulich/7fadb378a287c49902d8.js"></script></p>
+<p>Note: <code>&amp;#949;</code> is the code for ε, the empty string.
+<script type="application/javascript" src="https://gist.github.com/tbpalsulich/7fadb378a287c49902d8.js"></script>
+</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ fstcompile --acceptor --isymbols<span style="color:#f92672">=</span>ascii.syms regex.fst.txt &gt; regex.fst
-$ fstdraw --acceptor --isymbols<span style="color:#f92672">=</span>ascii.syms regex.fst | dot -Tpng &gt; regex.png</code></pre></div>
-<img src="https://buipalsulich.com/images/blog/regex.png" alt="regex.png" class="center">
-
+$ fstdraw --acceptor --isymbols<span style="color:#f92672">=</span>ascii.syms regex.fst | dot -Tpng &gt; regex.png
+</code></pre></div><img src="https://buipalsulich.com/images/blog/regex.png" alt="regex.png" class="center">
 <p>Let&rsquo;s try processing <code>abbcc</code> with this automaton. You start at state <code>0</code> (the one with no input edges). We can&rsquo;t move to state <code>1</code>, since we won&rsquo;t be able to process our first character <code>a</code>. So, we move to state <code>2</code> on an <code>ε</code>. We stay at <code>2</code> and process the <code>a</code>. We have two <code>b</code>s next. So, we move to state <code>1</code> on an <code>ε</code>, move to <code>3</code> on a <code>b</code>, then do a loop on <code>3</code> with the second <code>b</code>. Finally, we move to state <code>4</code> on the first <code>c</code>. Then, we&rsquo;re stuck &ndash; we have input left on the stack, but no way to process it. So, the input string does not match the regular expression.</p>
-
 <p>It&rsquo;s somewhat difficult to follow the edges around this graph since we sometimes have more than one option of where to move <em>right now</em>. The main cause of this is Thomson&rsquo;s construction leads to a lot of <code>ε</code>&hellip; We can do better.</p>
-
 <h3 id="properties-of-finite-state-automata">Properties of Finite State Automata</h3>
-
 <p>Two important properties of an automaton are if it is <strong>deterministic</strong> or <strong>minimal</strong>. Deterministic means that at every state there is exactly one valid move for each possible input letter. The first automaton was not deterministic since we could move on an <code>ε</code> from state 0 to state <code>1</code> <em>or</em> <code>2</code>. Minimal means exactly what it sounds like &ndash; it is impossible to create another automaton which accepts the same language (matches the same regular expression) as this one with fewer states or transitions. Clearly the first automaton was not minimal.</p>
-
 <p>The deterministic and minimal version of the above automaton is:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ fstrmepsilon regex.fst | fstminimize | fstdeterminize &gt; regex.min.fst
-$ fstdraw --acceptor --isymbols<span style="color:#f92672">=</span>ascii.syms regex.min.fst | dot -Tpng &gt; regex.min.png</code></pre></div>
-<img src="https://buipalsulich.com/images/blog/regex.min.png" alt="regex.min.png" class="center">
-
+$ fstdraw --acceptor --isymbols<span style="color:#f92672">=</span>ascii.syms regex.min.fst | dot -Tpng &gt; regex.min.png
+</code></pre></div><img src="https://buipalsulich.com/images/blog/regex.min.png" alt="regex.min.png" class="center">
 <p>Here, we exploit the fact that we can have more than one final state in our automaton. It&rsquo;s deterministic because there is exactly one option of where to go from each state &ndash; you can&rsquo;t make any decisions. It&rsquo;s minimal because you can&rsquo;t make it any smaller (<em>hand wave</em>).</p>
-
 <p>Finite state automata can also be <strong>weighted</strong>. Meaning, we can apply a weight to each edge of an automaton. In order to make algorithms play nice, these weights must be on what&rsquo;s called a <a href="http://en.wikipedia.org/wiki/Semiring">semiring</a>. A semiring is essentially a way to make sure certain operations (like determinization) behave properly &ndash; it comes bundled with a type of numbers it operates on, a <code>+</code> operator, a <code>x</code> operator, and identity elements for the two operations.</p>
-
-<p>For now, just know when you&rsquo;re trying to find the best way \&ldquo;through\&rdquo; an automaton for the given input, you want to take the path with the lowest weight. Sometimes, the weights along the path are added together, sometimes they&rsquo;re multiplied, sometimes it&rsquo;s something entirely different (you use the <code>+</code> operator for the given semiring). A weighted version of the above automaton might look like this:</p>
-
+<p>For now, just know when you&rsquo;re trying to find the best way &quot;through&quot; an automaton for the given input, you want to take the path with the lowest weight. Sometimes, the weights along the path are added together, sometimes they&rsquo;re multiplied, sometimes it&rsquo;s something entirely different (you use the <code>+</code> operator for the given semiring). A weighted version of the above automaton might look like this:</p>
 <p><a href="https://gist.github.com/tbpalsulich/8ddbddc604271f02b3b0">regex.w.fst.txt</a>:
-<script type="application/javascript" src="//gist.github.com/tbpalsulich/8ddbddc604271f02b3b0.js"></script></p>
+<script type="application/javascript" src="https://gist.github.com/tbpalsulich/8ddbddc604271f02b3b0.js"></script>
+</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ fstcompile --acceptor --isymbols<span style="color:#f92672">=</span>ascii.syms regex.w.fst.txt | fstrmepsilon | fstminimize | fstdeterminize &gt; regex.w.fst
-$ fstdraw --acceptor --isymbols<span style="color:#f92672">=</span>ascii.syms regex.w.fst | dot -Tpng &gt; regex.w.png</code></pre></div>
-<img src="https://buipalsulich.com/images/blog/regex.w.png" alt="regex.w.png" class="center">
-
+$ fstdraw --acceptor --isymbols<span style="color:#f92672">=</span>ascii.syms regex.w.fst | dot -Tpng &gt; regex.w.png
+</code></pre></div><img src="https://buipalsulich.com/images/blog/regex.w.png" alt="regex.w.png" class="center">
 <p>Weighted automata can be used to decide be two alternatives. For example, you&rsquo;re running a speech recognition system and the user says &ldquo;I have to go.&rdquo; How do you know the user didn&rsquo;t say, &ldquo;I have two go&rdquo;? First, you come up with a probability of words occurring next to each other (for example, <code>P(&quot;to go&quot;)</code> and <code>P(&quot;two go&quot;)</code>) &ndash; a language model. Then, you translate those probabilities into weights for your finite state machine. Then, when you&rsquo;re deciding between &ldquo;to&rdquo; and &ldquo;two&rdquo; you pick the sentence with lower weight (&ldquo;to&rdquo;).</p>
-
 <p>At first, finite state automata seem to be simple things with a very limited use case. But, they&rsquo;re useful in a wide range of problems. For example, instead of taking input on the character level, you could input words. Then, your automaton could learn to be a binary classifier of &ndash; yes or no &ndash; the input is a valid sentence. Finite State Transducers (which can output as well as input) are even more powerful.</p>
 
   </article>
@@ -146,7 +128,7 @@ $ fstdraw --acceptor --isymbols<span style="color:#f92672">=</span>ascii.syms re
       <footer class="footer">
   <section class="container">
     
-     © 2019
+     © 2021
     
        · 
       Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
@@ -170,7 +152,6 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
-
 
   </body>
 

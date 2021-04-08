@@ -19,11 +19,10 @@
     <meta property="og:title" content="Animating the Eyes of the Go Gopher" />
 <meta property="og:description" content="How to animate the Go gopher&#39;s eyes." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://buipalsulich.com/post/gopher-eyes/" />
+<meta property="og:url" content="https://buipalsulich.com/post/gopher-eyes/" /><meta property="og:image" content="https://buipalsulich.com/images/blog/gopher-eyes/gopher.png" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2019-05-27T00:00:00&#43;00:00" />
+<meta property="article:modified_time" content="2019-05-27T00:00:00&#43;00:00" />
 
-<meta property="og:image" content="https://buipalsulich.com/images/blog/gopher-eyes/gopher.png" />
-<meta property="article:published_time" content="2019-05-27T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2019-05-27T00:00:00&#43;00:00"/>
 
 
     
@@ -53,12 +52,10 @@
 
     
 
-    
-
     <link rel="icon" type="image/png" href="https://buipalsulich.com/images/favicon-32x32.png" sizes="32x32">
     <link rel="icon" type="image/png" href="https://buipalsulich.com/images/favicon-16x16.png" sizes="16x16">
 
-    <meta name="generator" content="Hugo 0.54.0" />
+    <meta name="generator" content="Hugo 0.82.0" />
   </head>
 
   <body class=" ">
@@ -93,9 +90,7 @@
     </header>
 
     <p>Scalable Vector Graphics (SVGs) are XML based images that can scale, with built-in support for interaction and animation. You can create them with programs like Illustrator &amp; Inkscape, or by typing the definitions or manually.</p>
-
 <p>I thought it would be fun to animate the eyes of the Go gopher, as you can see below (move your mouse or click/tap on the page).</p>
-
 <svg version="1.1" id="レイヤー_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
 	 y="0px" width="450px" height="220px" viewBox="0 0 450 220" enable-background="new 0 0 450 220"
 	 xml:space="preserve">
@@ -163,16 +158,13 @@
 		C225.247,149.475,178.874,153.527,176.913,138.045C175.348,125.682,176.913,138.045,176.913,138.045z"/>
 </g>
 </svg>
-
 <p>I started with an <a href="https://github.com/golang-samples/gopher-vector/blob/master/gopher.svg">SVG gopher by tenntenn</a>. Then, using Chrome developer tools, I hovered over the eyes and found the part of the SVG that defined the eyes and made a few changes:</p>
-
 <ul>
 <li>Added <code>class=&quot;pupil&quot;</code> and <code>class=&quot;glare&quot;</code> to the relevant ellipses. I use these classes later to grab the element to animate.</li>
 <li>Added an extra invisible white circle behind the pupil because the outline of the eye is a freeform path without an easy to reference radius to stay within (I wanted the entire pupil to stay visible.)</li>
 <li>Added <code>class=&quot;eye&quot;</code> to the <code>g</code> of each eye. We can use this class later to loop through the all eyes on the page.</li>
 <li>Finally, I moved the pupil and glare to the center of the eye to make the animations easy later.</li>
 </ul>
-
 <p>The final SVG for the eyes looks like this:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">g</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;eye&#34;</span>&gt;
     &lt;<span style="color:#f92672">circle</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;eyeball&#34;</span> <span style="color:#a6e22e">fill-rule</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;evenodd&#34;</span> <span style="color:#a6e22e">clip-rule</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;evenodd&#34;</span> <span style="color:#a6e22e">cx</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;131&#34;</span> <span style="color:#a6e22e">cy</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;92&#34;</span> <span style="color:#a6e22e">r</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;42&#34;</span> <span style="color:#a6e22e">fill</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;white&#34;</span>/&gt;
@@ -181,28 +173,19 @@
 &lt;/<span style="color:#f92672">g</span>&gt;
 &lt;<span style="color:#f92672">g</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;eye&#34;</span>&gt;
     &lt;<span style="color:#f92672">circle</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;eyeball&#34;</span> <span style="color:#a6e22e">fill-rule</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;evenodd&#34;</span> <span style="color:#a6e22e">clip-rule</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;evenodd&#34;</span> <span style="color:#a6e22e">cx</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;258&#34;</span> <span style="color:#a6e22e">cy</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;87&#34;</span> <span style="color:#a6e22e">r</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;42&#34;</span> <span style="color:#a6e22e">fill</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;white&#34;</span>/&gt;
-    &lt;<span style="color:#f92672">ellipse</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;pupil&#34;</span> <span style="color:#a6e22e">fill-rule</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;evenodd&#34;</span> <span style="color:#a6e22e">clip-rule</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;evenodd&#34;</span> <span style="color:#a6e22e">cx</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;258&#34;</span> <span style="color:#a6e22e">cy</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;87&#34;</span> <span style="color:#a6e22e">rx</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;14.582&#34;</span> <span style="color:#a6e22e">ry</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;16.062&#34;</span>/&gt;
-    &lt;<span style="color:#f92672">ellipse</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;glare&#34;</span> <span style="color:#a6e22e">fill-rule</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;evenodd&#34;</span> <span style="color:#a6e22e">clip-rule</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;evenodd&#34;</span> <span style="color:#a6e22e">fill</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;#FFFFFF&#34;</span> <span style="color:#a6e22e">cx</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;258&#34;</span> <span style="color:#a6e22e">cy</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;87&#34;</span> <span style="color:#a6e22e">rx</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;3.438&#34;</span> <span style="color:#a6e22e">ry</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;4.082&#34;</span>/&gt;
-&lt;/<span style="color:#f92672">g</span>&gt;</code></pre></div>
-<p>You can grab the <code>eye</code>s in JavaScript using <code>document.querySelectorAll</code>:</p>
+	&lt;<span style="color:#f92672">ellipse</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;pupil&#34;</span> <span style="color:#a6e22e">fill-rule</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;evenodd&#34;</span> <span style="color:#a6e22e">clip-rule</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;evenodd&#34;</span> <span style="color:#a6e22e">cx</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;258&#34;</span> <span style="color:#a6e22e">cy</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;87&#34;</span> <span style="color:#a6e22e">rx</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;14.582&#34;</span> <span style="color:#a6e22e">ry</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;16.062&#34;</span>/&gt;
+	&lt;<span style="color:#f92672">ellipse</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;glare&#34;</span> <span style="color:#a6e22e">fill-rule</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;evenodd&#34;</span> <span style="color:#a6e22e">clip-rule</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;evenodd&#34;</span> <span style="color:#a6e22e">fill</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;#FFFFFF&#34;</span> <span style="color:#a6e22e">cx</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;258&#34;</span> <span style="color:#a6e22e">cy</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;87&#34;</span> <span style="color:#a6e22e">rx</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;3.438&#34;</span> <span style="color:#a6e22e">ry</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;4.082&#34;</span>/&gt;
+&lt;/<span style="color:#f92672">g</span>&gt;
+</code></pre></div><p>You can grab the <code>eye</code>s in JavaScript using <code>document.querySelectorAll</code>:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">let</span> <span style="color:#a6e22e">eyes</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">querySelectorAll</span>(<span style="color:#e6db74">&#34;.eye&#34;</span>);
-</code></pre></div>
-<p>Once you have an SVG element, you can modify it using a CSS <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/transform">transform</a>. A transform manipulates the element, translating (moving), rotating, scaling, etc.</p>
-
+</code></pre></div><p>Once you have an SVG element, you can modify it using a CSS <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/transform">transform</a>. A transform manipulates the element, translating (moving), rotating, scaling, etc.</p>
 <p>You can get the current position of the mouse using the <code>onmousemove</code> event.</p>
-
 <p>Given the location of the eye and the location of the mouse, I calculated the angle between the two using <code>arctan</code>. Given the ratio of &ldquo;opposite&rdquo; over &ldquo;adjacent,&rdquo; arctan gives you the corresponding angle.</p>
-
 <img src="https://buipalsulich.com/images/blog/gopher-eyes/arctan.svg" alt="gopher-eyes/arctan.svg" class="center">
-
 <p>The goal is to rotate the pupil and glare of the eyes this same angle, toward the mouse.</p>
-
 <p>The transformation first moves the element (either the pupil or the glare) the correct distance along the positive x-axis, then rotates it toward the mouse.</p>
-
 <img src="https://buipalsulich.com/images/blog/gopher-eyes/transform.svg" alt="gopher-eyes/transform.svg" class="center">
-
 <p>We can use the distance between the eye and the mouse to decide how far away from the center of the eye we want to move the pupil and glare. I capped mine at 200px, meaning once the mouse is 200px away, the pupil and glare will be at the far edge of the eye.</p>
-
 <p>Now, given a mouse event <code>e</code>, we can loop through all <code>eye</code>s on the page, calculate the angle between the current eye and the mouse, and apply the transformations:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">animate</span>(<span style="color:#a6e22e">e</span>) {
     <span style="color:#a6e22e">eyes</span>.<span style="color:#a6e22e">forEach</span>(<span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">eye</span>) {
@@ -219,13 +202,13 @@
             <span style="color:#a6e22e">y</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">clientY</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">cy</span>,
             <span style="color:#a6e22e">d</span> <span style="color:#f92672">=</span> Math.<span style="color:#a6e22e">sqrt</span>(<span style="color:#a6e22e">x</span><span style="color:#f92672">*</span><span style="color:#a6e22e">x</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">y</span><span style="color:#f92672">*</span><span style="color:#a6e22e">y</span>),
             <span style="color:#a6e22e">theta</span> <span style="color:#f92672">=</span> Math.<span style="color:#a6e22e">atan2</span>(<span style="color:#a6e22e">y</span>,<span style="color:#a6e22e">x</span>),
-            <span style="color:#a6e22e">angle</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">theta</span><span style="color:#f92672">*</span><span style="color:#ae81ff">180</span><span style="color:#960050;background-color:#1e0010">/Math.PI + 360;</span>
+            <span style="color:#a6e22e">angle</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">theta</span><span style="color:#f92672">*</span><span style="color:#ae81ff">180</span><span style="color:#f92672">/</span>Math.<span style="color:#a6e22e">PI</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">360</span>;
     
         <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">max</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">200.0</span>
         <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">d</span> <span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">max</span>) <span style="color:#a6e22e">d</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">max</span>;
     
-        <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">t</span>  <span style="color:#f92672">=</span> <span style="color:#a6e22e">d</span> <span style="color:#960050;background-color:#1e0010">/ max * (eyeR - pupilR),</span>
-            <span style="color:#a6e22e">t2</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">d</span> <span style="color:#960050;background-color:#1e0010">/ max * (eyeR - glareR);</span>
+        <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">t</span>  <span style="color:#f92672">=</span> <span style="color:#a6e22e">d</span> <span style="color:#f92672">/</span> <span style="color:#a6e22e">max</span> <span style="color:#f92672">*</span> (<span style="color:#a6e22e">eyeR</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">pupilR</span>),
+            <span style="color:#a6e22e">t2</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">d</span> <span style="color:#f92672">/</span> <span style="color:#a6e22e">max</span> <span style="color:#f92672">*</span> (<span style="color:#a6e22e">eyeR</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">glareR</span>);
     
         <span style="color:#a6e22e">pupil</span>.<span style="color:#a6e22e">style</span>.<span style="color:#a6e22e">transform</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">`translate(</span><span style="color:#e6db74">${</span><span style="color:#a6e22e">t</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;px&#34;</span><span style="color:#e6db74">}</span><span style="color:#e6db74">) rotate(</span><span style="color:#e6db74">${</span><span style="color:#a6e22e">angle</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;deg&#34;</span><span style="color:#e6db74">}</span><span style="color:#e6db74">)`</span>;
         <span style="color:#a6e22e">pupil</span>.<span style="color:#a6e22e">style</span>.<span style="color:#a6e22e">transformOrigin</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">`</span><span style="color:#e6db74">${</span><span style="color:#a6e22e">eyeBall</span>.<span style="color:#a6e22e">cx</span>.<span style="color:#a6e22e">baseVal</span>.<span style="color:#a6e22e">value</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">t</span> <span style="color:#f92672">+</span><span style="color:#e6db74">&#34;px&#34;</span><span style="color:#e6db74">}</span><span style="color:#e6db74"> </span><span style="color:#e6db74">${</span><span style="color:#a6e22e">eyeBall</span>.<span style="color:#a6e22e">cy</span>.<span style="color:#a6e22e">baseVal</span>.<span style="color:#a6e22e">value</span> <span style="color:#f92672">+</span><span style="color:#e6db74">&#34;px&#34;</span><span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>;
@@ -234,15 +217,11 @@
         <span style="color:#a6e22e">glare</span>.<span style="color:#a6e22e">style</span>.<span style="color:#a6e22e">transformOrigin</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">`</span><span style="color:#e6db74">${</span><span style="color:#a6e22e">eyeBall</span>.<span style="color:#a6e22e">cx</span>.<span style="color:#a6e22e">baseVal</span>.<span style="color:#a6e22e">value</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">t2</span> <span style="color:#f92672">+</span><span style="color:#e6db74">&#34;px&#34;</span><span style="color:#e6db74">}</span><span style="color:#e6db74"> </span><span style="color:#e6db74">${</span><span style="color:#a6e22e">eyeBall</span>.<span style="color:#a6e22e">cy</span>.<span style="color:#a6e22e">baseVal</span>.<span style="color:#a6e22e">value</span> <span style="color:#f92672">+</span><span style="color:#e6db74">&#34;px&#34;</span><span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>;
     });
 }
-</code></pre></div>
-<p>Then, I connected the <code>animate</code> function to the mouse events I care about (<code>onmousemove</code> for following the mouse and <code>document.onclick</code> for devices without a mouse):</p>
+</code></pre></div><p>Then, I connected the <code>animate</code> function to the mouse events I care about (<code>onmousemove</code> for following the mouse and <code>document.onclick</code> for devices without a mouse):</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">document.<span style="color:#a6e22e">addEventListener</span>(<span style="color:#e6db74">&#34;mousemove&#34;</span>, <span style="color:#a6e22e">animate</span>);
 document.<span style="color:#a6e22e">onclick</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">animate</span>;
-</code></pre></div>
-<p><strong>Note:</strong> I use <code>getBoundingClientRect()</code> to get the location of the eye, rather than the <code>.cx</code> value of it to make sure I get the location on the page, not the location within the SVG. <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Positions">The MDN page on SVG Positions</a> describes more about SVG coordinate systems.</p>
-
+</code></pre></div><p><strong>Note:</strong> I use <code>getBoundingClientRect()</code> to get the location of the eye, rather than the <code>.cx</code> value of it to make sure I get the location on the page, not the location within the SVG. <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Positions">The MDN page on SVG Positions</a> describes more about SVG coordinate systems.</p>
 <p>And now we have a gopher with animated eyes! 👀</p>
-
 <svg version="1.1" id="レイヤー_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
 	 y="0px" width="450px" height="220px" viewBox="0 0 450 220" enable-background="new 0 0 450 220"
 	 xml:space="preserve">
@@ -310,8 +289,8 @@ document.<span style="color:#a6e22e">onclick</span> <span style="color:#f92672">
 		C225.247,149.475,178.874,153.527,176.913,138.045C175.348,125.682,176.913,138.045,176.913,138.045z"/>
 </g>
 </svg>
-
 <script src="https://buipalsulich.com/js/gopher-eyes.js"></script>
+
 
   </article>
 </section>
@@ -322,7 +301,7 @@ document.<span style="color:#a6e22e">onclick</span> <span style="color:#f92672">
       <footer class="footer">
   <section class="container">
     
-     © 2019
+     © 2021
     
        · 
       Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
@@ -346,7 +325,6 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
-
 
   </body>
 

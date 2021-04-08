@@ -25,11 +25,10 @@ Disclaimer: I&rsquo;m not an expert in privacy, security, networking, or anythin
 These instructions are somewhat minimal and assume you&rsquo;ve worked with a Raspberry Pi and SSH in the past.
 Set up your Raspberry Pi At a high level, you’ll need to flash an SD card, plug it in, set up your network, install updates (e." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://buipalsulich.com/post/rpi-ssh-tunnel/" />
+<meta property="og:url" content="https://buipalsulich.com/post/rpi-ssh-tunnel/" /><meta property="og:image" content="https://buipalsulich.com/images/blog/proxy/tunnel.png" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2019-04-29T17:58:38-04:00" />
+<meta property="article:modified_time" content="2019-04-29T17:58:38-04:00" />
 
-<meta property="og:image" content="https://buipalsulich.com/images/blog/proxy/tunnel.png" />
-<meta property="article:published_time" content="2019-04-29T17:58:38-04:00"/>
-<meta property="article:modified_time" content="2019-04-29T17:58:38-04:00"/>
 
 
     
@@ -59,12 +58,10 @@ Set up your Raspberry Pi At a high level, you’ll need to flash an SD card, plu
 
     
 
-    
-
     <link rel="icon" type="image/png" href="https://buipalsulich.com/images/favicon-32x32.png" sizes="32x32">
     <link rel="icon" type="image/png" href="https://buipalsulich.com/images/favicon-16x16.png" sizes="16x16">
 
-    <meta name="generator" content="Hugo 0.54.0" />
+    <meta name="generator" content="Hugo 0.82.0" />
   </head>
 
   <body class=" ">
@@ -98,70 +95,48 @@ Set up your Raspberry Pi At a high level, you’ll need to flash an SD card, plu
       <h1>Free HTTP Proxy with a Raspberry Pi, an SSH Tunnel, and Dynamic DNS</h1>
     </header>
 
-    
-
-<p>This post details how I set up my Raspberry Pi as an HTTP proxy through an SSH tunnel.</p>
-
+    <p>This post details how I set up my Raspberry Pi as an HTTP proxy through an SSH tunnel.</p>
 <p><strong>Disclaimer:</strong> I&rsquo;m not an expert in privacy, security, networking, or anything else in this post… Proceed at your own risk. If you require privacy or security, I recommend following a different post.</p>
-
 <p>These instructions are somewhat minimal and assume you&rsquo;ve worked with a Raspberry Pi and SSH in the past.</p>
-
 <h2 id="set-up-your-raspberry-pi">Set up your Raspberry Pi</h2>
-
 <p>At a high level, you’ll need to flash an SD card, plug it in, set up your network, install updates (e.g. <code>sudo apt-get update &amp;&amp; sudo apt-get upgrade</code>).</p>
-
 <p>Be sure to change your password (<code>raspi-config</code> or <code>passwd</code>).</p>
-
 <p>Since we’ll be exposing the Pi to the internet, I set up SSH keys and disabled password access.</p>
-
 <ol>
 <li>See <a href="https://www.raspberrypi.org/documentation/remote-access/ssh/">https://www.raspberrypi.org/documentation/remote-access/ssh/</a> for how to enable SSH (if you’re running headless, you might need to add an <code>ssh</code> file directly to the SD card with another computer, see the bottom of that page). You&rsquo;ve probably already done this if you ran the updates and configuration above.</li>
 <li>Setup SSH keys. <a href="https://www.raspberrypi.org/documentation/remote-access/ssh/passwordless.md">Here</a> are Pi-specific instructions.</li>
 <li>Disable password auth by editing <code>/etc/ssh/sshd_config</code> and adding (or uncommenting) a <code>PasswordAuthentication no</code> line.</li>
 <li>Restart SSH with <code>sudo service ssh restart</code>.</li>
 </ol>
-
 <p>I&rsquo;m running Raspbian. You may have to modify some instructions depending on your package manager, environment, etc. You could also do all of this on any network connected server, not just a Raspberry Pi.</p>
-
 <h3 id="install-a-proxy-squid3">Install a proxy (<code>squid3</code>)</h3>
-
 <p>The proxy will act as&hellip; the proxy running on the Pi. If you only want to use this as a SOCKS proxy, you can skip this step and not need any other software on the Pi. I haven&rsquo;t tried this, but do a dynamic port forward rather than a direct one.</p>
-
 <p>I&rsquo;m using <a href="http://www.squid-cache.org/"><code>squid</code></a>.</p>
-
 <p>Install it with:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">sudo apt-get install squid3</pre></div>
+<pre><code>sudo apt-get install squid3
+</code></pre>
 <p>Then configure the <code>/etc/squid/squid.conf</code> file. Make a backup first just in case:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">sudo cp /etc/squid/squid.conf /etc/squid/squid.conf.backup</pre></div>
+<pre><code>sudo cp /etc/squid/squid.conf /etc/squid/squid.conf.backup
+</code></pre>
 <p>Then edit <code>/etc/squid/squid.conf</code> to have the following two lines:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">acl localnet src 192.168.86.0/24
-http_access allow localnet</pre></div>
+<pre><code>acl localnet src 192.168.86.0/24
+http_access allow localnet
+</code></pre>
 <p>This allows access to the proxy from your <code>localnet</code>. Replace the IP address block with your local IP address block.</p>
-
 <p>Then restart the <code>squid</code> service:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">sudo service squid restart</pre></div>
+<pre><code>sudo service squid restart
+</code></pre>
 <p>By default, <code>squid</code> listens on port <code>3128</code>. You&rsquo;ll need this when creating the tunnel later.</p>
-
 <h2 id="configure-your-router">Configure your router</h2>
-
 <p><strong>Proceed with caution.</strong> This step exposes your Pi to the internet. This may be more risk than you&rsquo;re willing to take and you should evaluate if you would rather pay someone else (e.g. a cloud provider to run a VM for you&hellip;).</p>
-
 <p>We&rsquo;ll want to access our Raspberry Pi from outside our local network. So, we need to tell our router to send traffic on some port to the Pi. Each router will be different, but the goal is to create an entry to forward a port (let&rsquo;s say <code>8888</code>) to your Raspberry Pi port <code>22</code> (the default SSH port). Requests sent to your router on that port will be forwarded to the Pi. I&rsquo;ll use <code>192.168.0.2</code> as the local IP of the Pi in this post.</p>
-
 <p>You should also configure your router to give the Raspberry Pi a static IP address.</p>
-
 <h2 id="find-your-public-ip-address">Find your public IP address</h2>
-
 <p>Visit a site like <a href="https://toolbox.googleapps.com/apps/browserinfo/">https://toolbox.googleapps.com/apps/browserinfo/</a> (or search [what is my ip]) to find your external IP address. Make a note of this, we&rsquo;ll use it to SSH into our Pi. I&rsquo;ll use <code>111.222.333.444</code> as an example in this post.</p>
-
 <h2 id="open-ssh-tunnel-connection">Open SSH tunnel connection.</h2>
-
 <p>I&rsquo;m using <a href="https://www.putty.org/">PuTTY</a> on Windows. Use your preferred client. Be sure your SSH keys are configured properly so you can connect to your Pi (see <a href="https://www.raspberrypi.org/documentation/remote-access/ssh/passwordless.md">the docs</a>).</p>
-
 <p>The user/server to connect to is <code>pi@111.222.333.444</code> on port <code>8888</code> (whatever you set up on your router above).</p>
-
 <p>You&rsquo;ll also want to create a tunnel to send traffic from a local port (on your laptop) to the <code>squid</code> proxy we started on the Pi above. Pick a port you want the tunnel to connect to on your laptop (let&rsquo;s say <code>8080</code>) and say to tunnel that to <code>192.168.0.2:3128</code> (or <code>[whatever your Pi's local IP is]:[the squid port]</code>). In PuTTY, this is under <code>Connection &gt; SSH &gt; Tunnels</code> in the left-hand menu.</p>
-
 <figure>
     <img src="https://buipalsulich.com/images/blog/proxy/putty.png"
          alt="Putty SSH tunnel settings." width="400px"/> <figcaption>
@@ -169,9 +144,7 @@ http_access allow localnet</pre></div>
         </figcaption>
 </figure>
 
-
 <p>On your laptop, <code>localhost:8080</code> will be sent through the SSH tunnel to <code>squid</code> running on your Raspberry Pi (<code>192.168.0.2:3128</code>). The SSH connection goes from your laptop to the port you exposed from your router (<code>8888</code>) to port <code>22</code> of your Pi.</p>
-
 <figure>
     <img src="https://buipalsulich.com/images/blog/proxy/tunnel.png"
          alt="Architecture diagram of the proxy through the SSH tunnel."/> <figcaption>
@@ -179,15 +152,10 @@ http_access allow localnet</pre></div>
         </figcaption>
 </figure>
 
-
 <p>Save the connection settings so you can reuse it later.</p>
-
 <p>Open the connection and leave it running in the background (you can disconnect when you&rsquo;re done with the proxy).</p>
-
 <h2 id="configure-your-laptop-to-use-the-proxy">Configure your laptop to use the proxy</h2>
-
 <p>On Windows, open your proxy settings and add an entry with Address <code>localhost</code> and Port <code>8080</code> (or whatever port you configured with your SSH client). Here&rsquo;s what it looks like on my computer:</p>
-
 <figure>
     <img src="https://buipalsulich.com/images/blog/proxy/windows_settings.png"
          alt="&amp;lsquo;Manual proxy setup&amp;rsquo; windows settings."/> <figcaption>
@@ -195,11 +163,8 @@ http_access allow localnet</pre></div>
         </figcaption>
 </figure>
 
-
 <p>You can also configure per-application proxy settings, but I haven&rsquo;t tried this; I haven&rsquo;t needed to.</p>
-
-<h2 id="test-it-s-working">Test it&rsquo;s working</h2>
-
+<h2 id="test-its-working">Test it&rsquo;s working</h2>
 <ol>
 <li>Double-check the SSH connection is open.</li>
 <li>Double-check the proxy is enabled on your laptop.</li>
@@ -207,43 +172,37 @@ http_access allow localnet</pre></div>
 <li>Close the SSH connection, closing the tunnel. Web requests should stop working.</li>
 <li>Disable the proxy. Web requests should start working again.</li>
 </ol>
-
 <h2 id="set-up-dns">Set up DNS</h2>
-
 <p>DNS lets you use an easy-to-remember name rather than IP address.
 But, the IP address might change at any time. So, you have two options:</p>
-
 <ol>
 <li>Ask your ISP for a static IP. Mine charges a one-time fee of $25 plus $19.99 per month (which I didn&rsquo;t know about until my bill came and I disabled the static IP immediately&hellip;).</li>
 <li>Use dynamic DNS, where your Pi periodically notifies the DNS server what its IP address is (what I&rsquo;m using today).</li>
 </ol>
-
 <p>I&rsquo;m using Google Domains for my domain. So, I followed <a href="https://support.google.com/domains/answer/6147083?hl=en">their official instructions</a> for setting up a subdomain for Dynamic DNS. There are many other providers of dynamic DNS services, but this one was easiest for me.</p>
-
 <p>The Raspberry Pi needs to be configured to periodically ping the DNS server. I&rsquo;m using <code>ddclient</code>:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">sudo apt-get install ddclient</pre></div>
+<pre><code>sudo apt-get install ddclient
+</code></pre>
 <p>This will take you through a series of dialogs to configure it, but it didn&rsquo;t work well for me. Google Domains is natively supported by <code>ddclient</code>, so I edited my config following the Google Domains docs:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">ssl=yes
+<pre><code>ssl=yes
 use=web
 protocol=googledomains
 login=VGhpcyBpcyBub3QgdGhlIHJlYWwgbG9naW4u
 password=VGhpcyBhaW4ndCBpdC4=
-example.example.com</pre></div>
+example.example.com
+</code></pre>
 <p>I added <code>use=web</code> so <code>ddclient</code> grabs the IP adress from a web service, rather than locally.</p>
-
 <p>Then make sure the <code>ddclient</code> service is started:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">sudo service ddclient restart</pre></div>
+<pre><code>sudo service ddclient restart
+</code></pre>
 <p>You can make sure the IP address is being polled properly and authentication with the DNS service is working by running:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">sudo ddclient -query
-sudo ddclient -daemon=0 -debug -verbose -noquiet</pre></div>
+<pre><code>sudo ddclient -query
+sudo ddclient -daemon=0 -debug -verbose -noquiet
+</code></pre>
 <h2 id="conclusion">Conclusion</h2>
-
 <p>At this point, you should have a working HTTP proxy running on a Raspberry Pi (or other server) you can use through an SSH tunnel.</p>
-
 <p>You might want to disable your router&rsquo;s port forwarding rule if you don&rsquo;t need the proxy right now. No need to leave it open if you&rsquo;re not using it.</p>
-
 <p>Some open questions I have:</p>
-
 <ul>
 <li>Android? iOS? I&rsquo;ve seen some paid SSH clients that can open tunnels, but it seems cumbersome. I don&rsquo;t need this, so I haven&rsquo;t looked into it much.</li>
 <li>VPN? Why tunnel through SSH when I could set up a VPN (something like <a href="https://github.com/trailofbits/algo)?">https://github.com/trailofbits/algo)?</a> Could just start that up on some cloud provider VM and elimate a lot of security considerations with a bit of money.</li>
@@ -260,7 +219,7 @@ sudo ddclient -daemon=0 -debug -verbose -noquiet</pre></div>
       <footer class="footer">
   <section class="container">
     
-     © 2019
+     © 2021
     
        · 
       Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
@@ -284,7 +243,6 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
-
 
   </body>
 

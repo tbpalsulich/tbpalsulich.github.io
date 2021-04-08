@@ -17,9 +17,10 @@
     <meta property="og:title" content="Introduction to Finite State Transducers" />
 <meta property="og:description" content="An introduction to finite state transducers: examples, composition, and motivation." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://buipalsulich.com/post/introduction-to-finite-state-transducers/" />
-<meta property="article:published_time" content="2015-05-15T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2015-05-15T00:00:00&#43;00:00"/>
+<meta property="og:url" content="https://buipalsulich.com/post/introduction-to-finite-state-transducers/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2015-05-15T00:00:00&#43;00:00" />
+<meta property="article:modified_time" content="2015-05-15T00:00:00&#43;00:00" />
+
 
 
     
@@ -49,12 +50,10 @@
 
     
 
-    
-
     <link rel="icon" type="image/png" href="https://buipalsulich.com/images/favicon-32x32.png" sizes="32x32">
     <link rel="icon" type="image/png" href="https://buipalsulich.com/images/favicon-16x16.png" sizes="16x16">
 
-    <meta name="generator" content="Hugo 0.54.0" />
+    <meta name="generator" content="Hugo 0.82.0" />
   </head>
 
   <body class=" ">
@@ -88,53 +87,40 @@
       <h1>Introduction to Finite State Transducers</h1>
     </header>
 
-    
-
-<p><strong>Finite state transducers</strong> are the older sibling of <strong>finite state automata</strong>. If you haven&rsquo;t, take a few minutes to read through
+    <p><strong>Finite state transducers</strong> are the older sibling of <strong>finite state automata</strong>. If you haven&rsquo;t, take a few minutes to read through
 the <a href="https://buipalsulich.com/post/introduction-to-finite-state-automata/">introduction to FSA</a>.
-An FSA only has one tape, or feed of data: input. An FST has two: input and output. So, whenever you transition on an edge in the graph, you consume some input (possibly ε, the empty string, &ldquo;&rdquo;) and output something (possibly ε). Edges are now labeled <code>i:o</code>, where <code>i</code> is the input for the edge and <code>o</code> is the output. If the edge has a weight, the edge will be labeled <code>i:o/w</code>, where w is the weight.</p>
-
+An FSA only has one tape, or feed of data: input. An FST has two: input and output. So, whenever you transition on an edge in the graph, you consume some input (possibly ε, the empty string, &ldquo;&quot;) and output something (possibly ε). Edges are now labeled <code>i:o</code>, where <code>i</code> is the input for the edge and <code>o</code> is the output. If the edge has a weight, the edge will be labeled <code>i:o/w</code>, where w is the weight.</p>
 <h3 id="openfst">OpenFST</h3>
-
-<p>Just like in the introduction to FSA, the figures in this post are made with <a href="http://openfst.org/twiki/bin/view/FST/WebHome">OpenFST</a>, an open source tool built by Google and NYU to manipulate finite state transducers. You can specify an FST to use in OpenFST with the following format:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;source&gt; &lt;destination&gt; &lt;input&gt; &lt;ouput&gt; [&lt;weight&gt;]</pre></div>
-<p>Where <code>source</code> &amp; <code>destination</code> are integer IDs of states and <code>weight</code> is optional. See <a href="http://openfst.org/twiki/bin/view/FST/FstQuickTour#CreatingFsts">the OpenFST docs</a>.</p>
-
-<h3 id="example-replace-all-a-s-with-b-s">Example: Replace all <code>a</code>s with <code>b</code>s</h3>
-
+<p>Just like in the introduction to FSA, the figures in this post are made with <!-- raw HTML omitted -->OpenFST<!-- raw HTML omitted -->, an open source tool built by Google and NYU to manipulate finite state transducers. You can specify an FST to use in OpenFST with the following format:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">&lt;source&gt; &lt;destination&gt; &lt;input&gt; &lt;ouput&gt; [&lt;weight&gt;]
+</code></pre></div><p>Where <code>source</code> &amp; <code>destination</code> are integer IDs of states and <code>weight</code> is optional. See <a href="http://openfst.org/twiki/bin/view/FST/FstQuickTour#CreatingFsts">the OpenFST docs</a>.</p>
+<h3 id="example-replace-all-as-with-bs">Example: Replace all <code>a</code>s with <code>b</code>s</h3>
 <p>Let&rsquo;s say, for whatever reason, you have a thing against the letter <code>a</code>. Every <code>a</code> in your input should be replaced with a <code>b</code>. For simplicity, let&rsquo;s assume that our input alphabet is <code>{a, b, c}</code>. Here&rsquo;s an FST that does the trick:</p>
-
 <p>ascii.syms: <a href="https://gist.github.com/tbpalsulich/dc34e2533080f169606f">link</a>
-<script type="application/javascript" src="//gist.github.com/tbpalsulich/6c5e9ee09de64f17ab15.js"></script></p>
+<script type="application/javascript" src="https://gist.github.com/tbpalsulich/6c5e9ee09de64f17ab15.js"></script>
+</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ fstcompile --isymbols<span style="color:#f92672">=</span>&lt;ascii.syms --osymbols<span style="color:#f92672">=</span>ascii.syms &lt;a href<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span>&gt;ab.fst.txt&lt;/a&gt; &gt; ab.fst
-$ fstdraw --isymbols<span style="color:#f92672">=</span>ascii.syms --osymbols<span style="color:#f92672">=</span>ascii.syms ab.fst | dot -Tpng -Gsize<span style="color:#f92672">=</span><span style="color:#ae81ff">6</span>,3 -Eheadport<span style="color:#f92672">=</span>e -Etailport<span style="color:#f92672">=</span>w &gt; ab.png</code></pre></div>
-<img src="https://buipalsulich.com/images/blog/ab.png" alt="ab.png" class="center">
-
+$ fstdraw --isymbols<span style="color:#f92672">=</span>ascii.syms --osymbols<span style="color:#f92672">=</span>ascii.syms ab.fst | dot -Tpng -Gsize<span style="color:#f92672">=</span>6,3 -Eheadport<span style="color:#f92672">=</span>e -Etailport<span style="color:#f92672">=</span>w &gt; ab.png
+</code></pre></div><img src="https://buipalsulich.com/images/blog/ab.png" alt="ab.png" class="center">
 <h3 id="example-capitalize-every-character">Example: Capitalize every character</h3>
-
 <p>You can capitalize every character of the input by mapping lowercase letters to their uppercase version and mapping uppercase letters to themselves.
-<script type="application/javascript" src="//gist.github.com/tbpalsulich/3a41392136a2c673829f.js"></script></p>
+<script type="application/javascript" src="https://gist.github.com/tbpalsulich/3a41392136a2c673829f.js"></script>
+</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ fstcompile --isymbols<span style="color:#f92672">=</span>ascii.syms --osymbols<span style="color:#f92672">=</span>ascii.syms uppercase.fst.txt &gt; uppercase.fst
-$ fstdraw --isymbols<span style="color:#f92672">=</span>ascii.syms --osymbols<span style="color:#f92672">=</span>ascii.syms uppercase.fst | dot -Tpng -Gsize<span style="color:#f92672">=</span><span style="color:#ae81ff">6</span>,3 -Eheadport<span style="color:#f92672">=</span>e -Etailport<span style="color:#f92672">=</span>w &gt; uppercase.png</code></pre></div>
-<img src="https://buipalsulich.com/images/blog/uppercase.png" alt="uppercase.png" class="center">
-
+$ fstdraw --isymbols<span style="color:#f92672">=</span>ascii.syms --osymbols<span style="color:#f92672">=</span>ascii.syms uppercase.fst | dot -Tpng -Gsize<span style="color:#f92672">=</span>6,3 -Eheadport<span style="color:#f92672">=</span>e -Etailport<span style="color:#f92672">=</span>w &gt; uppercase.png
+</code></pre></div><img src="https://buipalsulich.com/images/blog/uppercase.png" alt="uppercase.png" class="center">
 <h3 id="composition">Composition</h3>
-
 <p>The real power of finite state transducers comes from composition. When you compose two transducers, you feed the output of one into the input of the other. We usually use ○ to indicate composition of two transducers. So <code>A = B ○ C</code>, takes the input from the user, feeds it to <code>B</code>, takes the output from <code>B</code> and feeds it to <code>C</code>, then the result is the output from <code>C</code>. So, for example, if <code>A</code> has two states with one edge <code>a:b</code>, and <code>B</code> has two states with one edge <code>b:c</code>, then <code>C</code> will have two states with one edge <code>a:c</code>.</p>
-
 <p>Let&rsquo;s try composing the &ldquo;replace every <code>a</code> with <code>b</code>&rdquo; FST from above with an FST that turns <code>b</code>s into <code>z</code>s. We&rsquo;ll start with an FST which replaces all <code>b</code>s with <code>z</code>s:
-<script type="application/javascript" src="//gist.github.com/tbpalsulich/c29dd43e42433fedf429.js"></script></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ fstcompile --isymbols<span style="color:#f92672">=</span>ascii.syms --osymbols<span style="color:#f92672">=</span>ascii.syms bc.fst.txt &gt; bc.fst</code></pre></div>
-<img src="https://buipalsulich.com/images/blog/bc.png" alt="bc.png" class="center">
-
+<script type="application/javascript" src="https://gist.github.com/tbpalsulich/c29dd43e42433fedf429.js"></script>
+</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ fstcompile --isymbols<span style="color:#f92672">=</span>ascii.syms --osymbols<span style="color:#f92672">=</span>ascii.syms bc.fst.txt &gt; bc.fst
+</code></pre></div><img src="https://buipalsulich.com/images/blog/bc.png" alt="bc.png" class="center">
 <p>Then compose our previous FST with this one:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">fstcompose ab.fst bc.fst &gt; abc.fst</code></pre></div>
-<img src="https://buipalsulich.com/images/blog/abc.png" alt="abc.png" class="center">
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">fstcompose ab.fst bc.fst &gt; abc.fst
+</code></pre></div><img src="https://buipalsulich.com/images/blog/abc.png" alt="abc.png" class="center">
 <p>With this transducer, if we input <code>abcab</code>, the output will be <code>zzczz</code>.</p>
-
 <p>By tying multiple transducers together, you can come up with powerful pipelines &ndash; capable of doing speech recognition, case restoration, spelling correction, and more. For example, you could have one FST that can insert vowels into the input words (with some cost) and another FST that gives a weight to every word (more popular words get a lower cost). When you compose them, you&rsquo;ll be left with an FST that can restore vowels in a sentence like, &ldquo;Ths sntnc hd vwls rmvd&rdquo; with high accuracy.</p>
-
 <p>In the next post, we&rsquo;ll create an FST to compute the <a href="http://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein edit distance</a> of two strings.</p>
 
   </article>
@@ -146,7 +132,7 @@ $ fstdraw --isymbols<span style="color:#f92672">=</span>ascii.syms --osymbols<sp
       <footer class="footer">
   <section class="container">
     
-     © 2019
+     © 2021
     
        · 
       Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
@@ -170,7 +156,6 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
-
 
   </body>
 

@@ -49,12 +49,39 @@ Set up your Raspberry Pi At a high level, you’ll need to flash an SD card, plu
     </item>
     
     <item>
+      <title>Meet the Authors – Go Language (Cloud Next &#39;19)</title>
+      <link>https://buipalsulich.com/post/meet-the-authors/</link>
+      <pubDate>Fri, 26 Apr 2019 13:41:19 -0400</pubDate>
+      
+      <guid>https://buipalsulich.com/post/meet-the-authors/</guid>
+      <description>https://www.youtube.com/watch?v=3yghHvvZQmA</description>
+    </item>
+    
+    <item>
+      <title>Running and Maintaining Go Serverless Applications (Cloud Next &#39;19)</title>
+      <link>https://buipalsulich.com/post/running-and-maintaining/</link>
+      <pubDate>Fri, 26 Apr 2019 13:41:19 -0400</pubDate>
+      
+      <guid>https://buipalsulich.com/post/running-and-maintaining/</guid>
+      <description>https://www.youtube.com/watch?v=9rnrOK0Ifqs</description>
+    </item>
+    
+    <item>
       <title>Using Go Modules</title>
       <link>https://buipalsulich.com/post/using-go-modules/</link>
       <pubDate>Tue, 19 Mar 2019 13:41:19 -0400</pubDate>
       
       <guid>https://buipalsulich.com/post/using-go-modules/</guid>
       <description>https://go.dev/blog/using-go-modules</description>
+    </item>
+    
+    <item>
+      <title>Go Cloud Functions: GCPPodcast</title>
+      <link>https://buipalsulich.com/post/go-cloud-functions/</link>
+      <pubDate>Tue, 26 Feb 2019 13:41:19 -0400</pubDate>
+      
+      <guid>https://buipalsulich.com/post/go-cloud-functions/</guid>
+      <description>https://www.youtube.com/watch?v=cwtPYepeTb8</description>
     </item>
     
     <item>

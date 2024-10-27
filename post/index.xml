@@ -6,7 +6,25 @@
     <description>Recent content in Posts on Tyler Bui-Palsulich</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 27 May 2019 00:00:00 +0000</lastBuildDate><atom:link href="https://buipalsulich.com/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 07 Nov 2019 13:41:19 -0400</lastBuildDate><atom:link href="https://buipalsulich.com/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Go Modules: v2 and Beyond</title>
+      <link>https://buipalsulich.com/post/v2-modules/</link>
+      <pubDate>Thu, 07 Nov 2019 13:41:19 -0400</pubDate>
+      
+      <guid>https://buipalsulich.com/post/v2-modules/</guid>
+      <description>https://go.dev/blog/v2-go-modules</description>
+    </item>
+    
+    <item>
+      <title>Publishing Go Modules</title>
+      <link>https://buipalsulich.com/post/publishing-go-modules/</link>
+      <pubDate>Thu, 26 Sep 2019 13:41:19 -0400</pubDate>
+      
+      <guid>https://buipalsulich.com/post/publishing-go-modules/</guid>
+      <description>https://go.dev/blog/publishing-go-modules</description>
+    </item>
+    
     <item>
       <title>Animating the Eyes of the Go Gopher</title>
       <link>https://buipalsulich.com/post/gopher-eyes/</link>
@@ -36,7 +54,7 @@ Set up your Raspberry Pi At a high level, you’ll need to flash an SD card, plu
       <pubDate>Tue, 19 Mar 2019 13:41:19 -0400</pubDate>
       
       <guid>https://buipalsulich.com/post/using-go-modules/</guid>
-      <description>https://blog.golang.org/using-go-modules</description>
+      <description>https://go.dev/blog/using-go-modules</description>
     </item>
     
     <item>
@@ -45,7 +63,7 @@ Set up your Raspberry Pi At a high level, you’ll need to flash an SD card, plu
       <pubDate>Tue, 16 Oct 2018 13:39:55 -0400</pubDate>
       
       <guid>https://buipalsulich.com/post/appengine-go111/</guid>
-      <description>https://blog.golang.org/appengine-go111</description>
+      <description>https://go.dev/blog/appengine-go111</description>
     </item>
     
     <item>

@@ -6,7 +6,16 @@
     <description>Recent content on Tyler Bui-Palsulich</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 07 Nov 2019 13:41:19 -0400</lastBuildDate><atom:link href="https://buipalsulich.com/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 10 Aug 2020 10:22:56 -0400</lastBuildDate><atom:link href="https://buipalsulich.com/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Why Go modules are faster than GOPATH</title>
+      <link>https://buipalsulich.com/post/why-go-modules-are-faster/</link>
+      <pubDate>Mon, 10 Aug 2020 10:22:56 -0400</pubDate>
+      
+      <guid>https://buipalsulich.com/post/why-go-modules-are-faster/</guid>
+      <description>https://medium.com/@tbpalsulich/why-go-modules-are-faster-than-gopath-3e56cce41020</description>
+    </item>
+    
     <item>
       <title>Go Modules: v2 and Beyond</title>
       <link>https://buipalsulich.com/post/v2-modules/</link>
